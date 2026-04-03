@@ -1,4 +1,4 @@
-/* 1. Xóa viền và căn giữa khung game giữa màn hình */
+
 body {
     margin: 0;
     background-color: #e5f0fa; 
@@ -56,10 +56,10 @@ body {
    width: calc( 100 / 1920 * 100%);
     left: calc( 1597/ 1920 * 100%);
      top: calc( 102 / 1080 * 100%);
-    cursor: pointer; /* Biến con trỏ chuột thành hình bàn tay khi chỉ vào */
+    cursor: pointer; 
 }
 
-/* Ví tiền nằm ở góc trên cùng bên phải */
+
 .vi-tien {
     position: absolute;
    width: calc( 100 / 1920 * 100%);

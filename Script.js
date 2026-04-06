@@ -1,157 +1,153 @@
-// ============ PHẦN 1: LIÊN KẾT GIAO DIỆN ============
+// ==========================================
+// 1. KHAI BÁO BIẾN TOÀN CỤC
+// ==========================================
 const nutStart = document.getElementById('nut-bat-dau');
 const nutStop = document.getElementById('nut-stop');
 const nutPause = document.getElementById('nut-pause');
 const hinhMeo = document.getElementById('meo-chinh');
-
-// Nếu bên HTML chưa có thẻ <input id="input"> thì code vẫn chạy với 25 phút
-const _NhapThoiGian = document.getElementById('input'); 
-const hienThi = document.getElementById('so-giay');
 const bang = document.getElementById('cum-dem-gio');
+const hienThi = document.getElementById('so-giay'); 
 
-// ============ PHẦN 2: CÁC BIẾN HOẠT ĐỘNG ============
-let DangChay = false;
-let ThoiGianConLai = 0; // Đơn vị: giây
-let BienDemThoiGian = null;
-let dangTamDung = false;
+// Thêm biến cho các yêu cầu bổ sung
+const _NhapThoiGian = document.getElementById('input'); 
+const amThanhTing = new Audio('ting.mp3');
 
-// YÊU CẦU 1: Âm thanh khi hết giờ (Bạn cần tạo 1 file mp3 tên là "ting.mp3" để cùng chỗ với file html)
-const amThanhTing = new Audio('ting.mp3'); 
+let phut = 25; 
+let giay = 0;
+let boDem = null;
+let dangTamDung = false; // Biến để theo dõi xem có đang Pause hay không
 
-// ============ PHẦN 3: CÁC HÀM XỬ LÝ ============
+// ==========================================
+// 2. CÁC HÀM XỬ LÝ CHUNG (Viết sẵn để dùng lại)
+// ==========================================
 
-// Cập nhật lại giao diện và Tab tiêu đề
-function CapNhatHienThi(giay) {
-    const phut = Math.floor(giay / 60);
-    const _giay = giay % 60;
-
-    const hienthiphut = phut < 10 ? "0" + phut : phut;
-    const hienthigiay = _giay < 10 ? "0" + _giay : _giay;
-
-    const chuoiHienThi = hienthiphut + ":" + hienthigiay;
+// Hàm chạy đếm ngược
+function batDauDemNguoc() {
+    clearInterval(boDem); // Dọn dẹp bộ đếm cũ cho an toàn
     
-    if (hienThi) hienThi.innerText = chuoiHienThi;
-
-    // YÊU CẦU 4: Khi chuyển tab khác, thời gian vẫn tiếp tục hiện trên thanh tab
-    document.title = `(${chuoiHienThi}) Pomodoro`;
-}
-
-// YÊU CẦU 2: Nhấn Stop là hủy (Về lại bằng 0 và không đếm nữa)
-function HuyBo() { 
-    clearInterval(BienDemThoiGian);
-    DangChay = false;
-    dangTamDung = false;
-    ThoiGianConLai = 0;
-    
-    if (hienThi) hienThi.innerText = "00:00";
-    document.title = "Mèo Pomodoro";
-    
-    if (hinhMeo) hinhMeo.src = "asset/meongu.GIF";
-    if (bang) bang.classList.add('bang-an');       
-    
-    // Nút START hiện lại rực rỡ để bấm được
-    if (nutStart) {
-        nutStart.classList.remove('nut-an');
-        nutStart.classList.add('nảy-xuong');
-        nutStart.style.opacity = "1"; 
-        nutStart.style.pointerEvents = "auto";
-    }
-    
-    // Ẩn nút Stop và Pause chờ lượt mới
-    if (nutStop) nutStop.classList.add('nut-an');
-    if (nutPause) nutPause.classList.add('nut-an');
-}   
-
-
-// YÊU CẦU 1: Đến hết thời gian thì kêu tiếng ting
-function HetGio() { 
-    setTimeout(() => {
-        // Mở nhạc Ting Ting
-        amThanhTing.play().catch(e => console.log("Lỗi: Không tìm thấy file ting.mp3"));
-
-        alert("Hết giờ rồi, giỏi lắm!");
-        HuyBo(); // Chạy hàm hủy (reset dọn dẹp mọi thứ về ban đầu)
-    }, 500);
-}
-
-// YÊU CẦU 1: Nút start bấm chạy đếm lùi
-function BamGio() { 
-    if (DangChay && !dangTamDung) return; // Đang chạy bình thường thì không cho click Start thêm nữa
-    
-    if (!DangChay) { // Chơi một ván mới hoàn toàn
-        // YÊU CẦU 3: Chỉnh thời gian đếm ngược tuỳ ý 
-        let soPhutNhap = 25; // Nhưng mặc định là 25 phút nếu nhác nhập
-        if (_NhapThoiGian && _NhapThoiGian.value) {
-            soPhutNhap = parseInt(_NhapThoiGian.value);
-            if (isNaN(soPhutNhap) || soPhutNhap <= 0) {
-                alert("Bạn nhập số phút tào lao rồi, nhập lại nhen!");
-                return;
+    boDem = setInterval(function() {
+        if (giay === 0) {
+            if (phut === 0) {
+                // YÊU CẦU 1: HẾT GIỜ THÌ KÊU VÀ HIỆN THÔNG BÁO
+                clearInterval(boDem);
+                setTimeout(() => {
+                    amThanhTing.play().catch(e => console.log("Lỗi: Không tìm thấy file ting.mp3"));
+                    alert("Hết giờ rồi, giỏi lắm!");
+                    datLaiGiaoDien(); // Gọi hàm reset giao diện
+                }, 500);
+                return; 
             }
+            phut--;      
+            giay = 59;   
+        } else {
+            giay--;      
         }
-        ThoiGianConLai = soPhutNhap * 60; // VD nhập 5 => 5 x 60 = 300 giây
-    }
 
-    DangChay = true;
-    dangTamDung = false;
+        let s = giay < 10 ? "0" + giay : giay;
+        let m = phut < 10 ? "0" + phut : phut;
+        let chuoiHienThi = m + ":" + s;
+        
+        hienThi.innerText = chuoiHienThi;
+        
+        // YÊU CẦU 4: Cập nhật tiêu đề Tab ngay cả khi thoát web
+        document.title = `(${chuoiHienThi}) Pomodoro`;
+    }, 1000);
+}
 
-    // Gán hoạt ảnh Giao diện khi bắt đầu chạy
+// Hàm Reset giao diện về lúc chưa bấm Start
+function datLaiGiaoDien() {
+    // 1. Hiện lại nút Start
+    nutStart.style.opacity = "1";
+    nutStart.style.pointerEvents = "auto";
+
+    // 2. Cất nút Stop và Pause đi
+    nutStop.classList.add('nut-an');
+    nutStop.classList.remove('nảy-len');
+    
+    nutPause.classList.add('nut-an');
+    nutPause.classList.remove('nảy-xuong');
+    nutPause.style.opacity = "1"; // Reset lại độ sáng nút Pause
+    dangTamDung = false; // Reset trạng thái Pause
+    
+    // Reset luôn tiêu đề
+    document.title = "Mèo Pomodoro";
+    hienThi.innerText = "00:00"; 
+
+    // 3. Mèo đi ngủ
+    hinhMeo.src = "asset/meongu.GIF"; 
+    
+    // Ẩn bảng đồng hồ (tuỳ chọn)
+    if (bang) bang.classList.add('bang-an');
+}
+
+
+// ==========================================
+// 3. SỰ KIỆN BẤM CÁC NÚT
+// ==========================================
+
+// --- NÚT START ---
+nutStart.addEventListener('click', function() {
+    this.style.opacity = "0";
+    this.style.pointerEvents = "none";
+
+    nutStop.classList.remove('nut-an');
+    nutStop.classList.add('nảy-len');
+    
+    nutPause.classList.remove('nut-an');
+    nutPause.classList.add('nảy-xuong');
+
+    hinhMeo.src = "asset/meodung.GIF";
+
     if (bang) {
         bang.classList.remove('bang-an');
         bang.classList.add('bang-hien');
     }
-    if (hinhMeo) hinhMeo.src = "asset/meodung.GIF";
+
+    // YÊU CẦU 3: Lấy thời gian đếm ngược tùy ý từ Input
+    let soPhutNhap = 25; 
+    if (_NhapThoiGian && _NhapThoiGian.value) {
+        soPhutNhap = parseInt(_NhapThoiGian.value);
+        if (isNaN(soPhutNhap) || soPhutNhap <= 0) {
+            alert("Vui lòng nhập số phút hợp lệ!");
+            datLaiGiaoDien();
+            return;
+        }
+    }
     
-    if (nutStart) {
-        nutStart.style.opacity = "0"; // Làm mờ Start
-        nutStart.style.pointerEvents = "none";
-    }
-    if (nutStop) {
-        nutStop.classList.remove('nut-an');
-        nutStop.classList.add('nảy-len');
-        nutStop.style.opacity = "1";
-        nutStop.style.pointerEvents = "auto";
-    }
-    if (nutPause) {
-        nutPause.classList.remove('nut-an');
-        nutPause.classList.add('nảy-xuong');
-        nutPause.style.opacity = "1";
-        nutPause.style.pointerEvents = "auto";
-    }
+    phut = soPhutNhap;
+    giay = 0;
+    dangTamDung = false;
+    
+    let m = phut < 10 ? "0" + phut : phut;
+    let chuoiHienThi = m + ":00";
+    hienThi.innerText = chuoiHienThi;
+    document.title = `(${chuoiHienThi}) Pomodoro`;
 
-    CapNhatHienThi(ThoiGianConLai); // In đồng hồ lần đầu
+    batDauDemNguoc();
+});
 
-    // Xoá bộ đếm cũ cẩn thận để không bị đếm chồng
-    clearInterval(BienDemThoiGian);
-    BienDemThoiGian = setInterval(function() {
-        ThoiGianConLai--; 
+// --- NÚT STOP (DỪNG HẲN) ---
+nutStop.addEventListener('click', function() {
+    clearInterval(boDem); // Dừng ngay bộ đếm
+    datLaiGiaoDien(); // Thu dọn các nút bấm
+});
+
+// --- NÚT PAUSE (TẠM DỪNG / ĐI TIẾP) ---
+nutPause.addEventListener('click', function() {
+    if (dangTamDung === false) {
+        // TRƯỜNG HỢP 1: Đang chạy -> Bấm vào để TẠM DỪNG
+        clearInterval(boDem); // Đóng băng thời gian
+        dangTamDung = true;   // Ghi nhớ là đang Pause
         
-        if (ThoiGianConLai <= 0) {
-            CapNhatHienThi(0);
-            clearInterval(BienDemThoiGian);
-            HetGio();
-        } else {
-            CapNhatHienThi(ThoiGianConLai);
-        }
-    }, 1000);
-}
-
-// YÊU CẦU 2: Pause là tạm dừng (nhưng ko reset giờ)
-function TamDung() { 
-    if (DangChay && !dangTamDung) {
-        clearInterval(BienDemThoiGian); // Dừng đếm thời gian lại
-        dangTamDung = true;
+        hinhMeo.src = "asset/meongu.GIF"; // Mèo tranh thủ chợp mắt
+        this.style.opacity = "0.6"; // Làm nút Pause tối đi một chút để báo hiệu
         
-        if (hinhMeo) hinhMeo.src = "asset/meongu.GIF"; // Đổi về mèo ngủ 
-        alert("Đã tạm dừng! Bấm vào 'Start' để tính giờ tiếp.");
+    } else {
+        // TRƯỜNG HỢP 2: Đang tạm dừng -> Bấm vào để CHẠY TIẾP
+        batDauDemNguoc();     // Gọi hàm chạy tiếp (nó sẽ chạy tiếp số phút/giây đang lưu)
+        dangTamDung = false;  // Tắt chế độ Pause
         
-        if (nutStart) {
-            nutStart.style.opacity = "1"; // Cho phép nút Start bấm lại được để tiếp tục (Resume)
-            nutStart.style.pointerEvents = "auto"; 
-        }
+        hinhMeo.src = "asset/meodung.GIF"; // Mèo dậy làm việc tiếp
+        this.style.opacity = "1"; // Nút Pause sáng lại như cũ
     }
-}
-
-// ============ PHẦN 4: GẮN SỰ KIỆN NÚT BẤM ============
-if (nutStart) nutStart.addEventListener('click', BamGio);
-if (nutStop) nutStop.addEventListener('click', HuyBo); 
-if (nutPause) nutPause.addEventListener('click', TamDung);
+});

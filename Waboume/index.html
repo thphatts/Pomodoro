@@ -1,31 +1,50 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mèo Pomodoro</title>
-    
+
     <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
-
-   
-
     <div class="khung-game">
-        
+
         <img src="asset/anhnenthat.png" alt="Nền phòng" class="anh-nen">
 
-        <img src="asset/meongu.gif" alt="Chú mèo đang ngủ" class="chu-meo">
+        <img src="asset/meongu.gif" alt="Chú mèo đang ngủ" class="chu-meo" id="cat">
 
-        <img src="asset/nutstart.png" alt="Nút bắt đầu" class="nut-start">
+        <!-- Controls & Timer -->
+        <div class="timer-container">
+            <div id="timer-display">25:00</div>
+            <div class="controls">
+                <input type="number" id="_input" value="25" min="1" max="120" title="Nhập số phút">
+                <!-- Nút Start hiện tại là hình ảnh nên ta vẫn giữ, nhóm vào cùng 1 cụm cho dễ quản lý CSS sau này hoặc định vị bằng position absolute -->
+            </div>
+        </div>
+
+        <!-- Stop & Pause Buttons -->
+        <button id="pause-btn" class="nut-dieukhien">TẠM DỪNG</button>
+        <button id="stop-btn" class="nut-dieukhien nut-stop">HỦY BỎ</button>
+
+        <img src="asset/nutstart.png" alt="Nút bắt đầu" class="nut-start" id="start">
+
+        <!-- UI Góc phải & trái -->
         <img src="asset/nutshop.png" alt="Cửa hàng" class="nut-cua-hang">
         <img src="asset/nutvitien.png" alt="Ví tiền" class="vi-tien">
-        <img src="asset/thanhthucan.png" alt="Thanh Thức ăn "  class="thanh-thuc-an">
-        <img src="asset/thanhcamxuc.png"alt="Thanh cảm xúc" class="thanh-cam-xuc">
+        <img src="asset/thanhthucan.png" alt="Thanh Thức ăn " class="thanh-thuc-an">
+        <img src="asset/thanhcamxuc.png" alt="Thanh cảm xúc" class="thanh-cam-xuc">
+
+        <!-- Âm thanh lấy tạm 1 file trên mạng -->
+        <audio id="ting-audio" src="https://assets.mixkit.co/active_storage/sfx/2869/2869-preview.mp3"
+            preload="auto"></audio>
 
     </div>
 
     <script src="script.js"></script>
 
 </body>
+
 </html>

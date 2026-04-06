@@ -41,31 +41,9 @@ function capNhatHienThi(giay) {
 capNhatHienThi(thoiGianConLai);
 
 // ----------------------------------------------------
-// [YÊU CẦU 3]: CHỈNH SỬA THỜI GIAN THEO Ý MÌNH
+// [YÊU CẦU 3]: LẤY DỮ LIỆU TỪ Ô NHẬP
 // ----------------------------------------------------
-if (hienThi) {
-    // Biến thời gian thành nút bấm được
-    hienThi.style.cursor = "pointer";
-    hienThi.title = "Nhấp vào đây để đổi thời gian";
-    
-    hienThi.addEventListener('click', function() {
-        if (dangChay) {
-            alert("Vui lòng tạm dừng (Pause) hoặc hủy (Stop) trước khi chỉnh thời gian!");
-            return;
-        }
-        
-        let nhapPhut = prompt("Bạn muốn đếm ngược bao nhiêu phút?", Math.floor(thoiGianConLai / 60));
-        let phut = parseInt(nhapPhut);
-        
-        // Kiểm tra hợp lệ
-        if (!isNaN(phut) && phut > 0) {
-            thoiGianConLai = phut * 60;
-            // Lưu lại làm mặc định cho lần Stop sau
-            thoiGianGocMacDinh = thoiGianConLai; 
-            capNhatHienThi(thoiGianConLai);
-        }
-    });
-}
+const oNhapPhut = document.getElementById('_input');
 
 // ----------------------------------------------------
 // [YÊU CẦU 1]: ẤN START CHẠY NGƯỢC, HẾT GIỜ KÊU TING
@@ -104,10 +82,20 @@ if (nutStart) {
 
         // Đổi mèo sang trạng thái đứng/tập trung
         if (hinhMeo) {
-            hinhMeo.src = "asset/meodung.GIF";
+            hinhMeo.src = "asset/meodung.gif";
         }
 
         dangChay = true;
+        
+        // Lấy thời gian từ ô nhập
+        if (oNhapPhut && oNhapPhut.value) {
+            let phutNhap = parseInt(oNhapPhut.value);
+            if (!isNaN(phutNhap) && phutNhap > 0) {
+                thoiGianConLai = phutNhap * 60;
+                thoiGianGocMacDinh = thoiGianConLai;
+            }
+        }
+        capNhatHienThi(thoiGianConLai);
         
         // Bắt đầu đếm ngược thời gian
         if (boDem) clearInterval(boDem);
@@ -144,12 +132,12 @@ if (nutPause) {
             
             // Đổi CSS làm mờ nhẹ biểu thị trạng thái đang pause
             nutPause.style.opacity = "0.6"; 
-            if (hinhMeo) hinhMeo.src = "asset/meotamngung.GIF"; // Giả sử nếu bạn có hình mèo tạm ngừng
+            if (hinhMeo) hinhMeo.src = "asset/meongu.gif"; 
         } else if (thoiGianConLai > 0) {
             // HÀNH ĐỘNG TIẾP TỤC
             nutPause.style.opacity = "1"; 
             dangChay = true;
-            if (hinhMeo) hinhMeo.src = "asset/meodung.GIF";
+            if (hinhMeo) hinhMeo.src = "asset/meodung.gif";
 
             boDem = setInterval(function() {
                 if (thoiGianConLai > 0) {
@@ -211,6 +199,6 @@ function resetGiaoDien() {
 
     // Đưa mèo trở lại ngủ gật
     if (hinhMeo) {
-        hinhMeo.src = "asset/meongu.GIF";
+        hinhMeo.src = "asset/meongu.gif";
     }
 }

@@ -1,0 +1,5 @@
+{"properties": [{
+  "name": "spring.h2.console.enabled",
+  "type": "java.lang.String",
+  "description": "A description for 'spring.h2.console.enabled'"
+}]}

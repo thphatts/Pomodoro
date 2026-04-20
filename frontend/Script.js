@@ -8,7 +8,7 @@ const hinhMeo = document.getElementById('meo-chinh');
 const bang = document.getElementById('cum-dem-gio');
 const hienThi = document.getElementById('so-giay'); 
 
-let phut = 25; 
+let phut = 1; 
 let giay = 0;
 let boDem = null;
 let dangTamDung = false; // Biến để theo dõi xem có đang Pause hay không
@@ -18,16 +18,41 @@ let dangTamDung = false; // Biến để theo dõi xem có đang Pause hay khôn
 // ==========================================
 
 // Hàm chạy đếm ngược
+// Hàm chạy đếm ngược (ĐÃ TÍCH HỢP API CỦA JAVA BACKEND)
 function batDauDemNguoc() {
     clearInterval(boDem); // Dọn dẹp bộ đếm cũ cho an toàn
     
     boDem = setInterval(function() {
         if (giay === 0) {
             if (phut === 0) {
-                // HẾT GIỜ 25 PHÚT
-                clearInterval(boDem);
-                datLaiGiaoDien(); // Gọi hàm reset giao diện
+                // ==========================================================
+                // 🔥 CHÍNH LÀ CHỖ NÀY: ĐỒNG HỒ VỪA CHẠY VỀ 00:00 (HẾT 25 PHÚT)
+                // ==========================================================
+                clearInterval(boDem); // Dừng đồng hồ lại
+                
+                // 1. Gọi sang cổng 8080 báo cho Java biết để cộng tiền
+                fetch('http://localhost:8080/api/player/reward?minutes=1', { 
+                    method: 'POST' 
+                })
+                .then(res => res.json())
+                .then(data => {
+                    // Java xử lý xong trả về biến data
+                    // alert("Chúc mừng! Bạn được cộng thêm xu. Tổng ví mới: " + data.coins + " xu");
+                    
+                    // 2. Tự động đắp số tiền mới lên giao diện cho User thấy
+                    let theHienThiTien = document.getElementById('so-tien');
+                    if (theHienThiTien) {
+                        theHienThiTien.innerText = data.coins;
+                    }
+                })
+                .catch(err => {
+                    console.log("Lỗi: Không kết nối được với Server Java", err);
+                });
+
+                // 3. Reset lại giao diện (Mèo đi ngủ, hiện lại nút Start)
+                datLaiGiaoDien(); 
                 return; 
+                // ==========================================================
             }
             phut--;      
             giay = 59;   
@@ -86,14 +111,14 @@ nutStart.addEventListener('click', function() {
     phut = 25;
     giay = 0;
     dangTamDung = false;
-    hienThi.innerText = "25:00";
+    hienThi.innerText = "1:00";
     batDauDemNguoc();
 });
 
 // --- NÚT STOP (DỪNG HẲN) ---
 nutStop.addEventListener('click', function() {
     clearInterval(boDem); // Dừng ngay bộ đếm
-    hienThi.innerText = "25:00"; // Chữ nhảy về 25:00
+    hienThi.innerText = "1:00"; // Chữ nhảy về 25:00
     datLaiGiaoDien(); // Thu dọn các nút bấm
 });
 
@@ -120,13 +145,21 @@ nutPause.addEventListener('click', function() {
 const nutVi = document.getElementById('mo-vi');
 const bangTien = document.getElementById('bang-tien');
 
-nutVi.addEventListener('click', function() {
-    // Nếu đang ẩn thì hiện và chạy hiệu ứng
+nutVi.addEventListener('click', async function() {
     if (bangTien.classList.contains('nut-an')) {
+        // TRƯỚC KHI HIỆN VÍ, GỌI JAVA ĐỂ LẤY SỐ DƯ
+        try {
+            let response = await fetch('http://localhost:8080/api/player/status');
+            let data = await response.json();
+            // Đắp số tiền thật vào màn hình (Thay thẻ <span> số tiền)
+            document.getElementById('so-tien').innerText = data.coins;
+        } catch (error) {
+            console.log("Chưa bật server Java hoặc lỗi CORS:", error);
+        }
+
         bangTien.classList.remove('nut-an');
         bangTien.classList.add('hieu-ung-bop');
     } else {
-        // Nếu bấm lại lần nữa thì ẩn đi
         bangTien.classList.add('nut-an');
         bangTien.classList.remove('hieu-ung-bop');
     }
@@ -237,8 +270,8 @@ nutStart.addEventListener('click', function() {
     nutStop.classList.remove('nut-an');
     nutPause.classList.remove('nut-an');
     
-phut = 25; giay = 0;
+phut = 1; giay = 0;
     dangTamDung = false;
-    hienThi.innerText = "25:00";
+    hienThi.innerText = "1:00";
     batDauDemNguoc();
 });

@@ -8,6 +8,15 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/player")
 @CrossOrigin(origins = "*")
 public class PlayerController {
+    // API "Kính lúp" dùng nội bộ để soi Database
+    @Autowired
+    private UserRepository userRepository;
+
+    @GetMapping("/all")
+    public ResponseEntity<?> getAllData() {
+        // Lấy sạch sành sanh mọi thứ trong bảng User ra
+        return ResponseEntity.ok(userRepository.findAll());
+    }
 
     @Autowired
     private PlayerService playerService;

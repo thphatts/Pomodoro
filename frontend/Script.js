@@ -8,7 +8,7 @@ const hinhMeo = document.getElementById('meo-chinh');
 const bang = document.getElementById('cum-dem-gio');
 const hienThi = document.getElementById('so-giay'); 
 
-let phut = 1; 
+let phut = 25; 
 let giay = 0;
 let boDem = null;
 let dangTamDung = false; // Biến để theo dõi xem có đang Pause hay không
@@ -26,12 +26,12 @@ function batDauDemNguoc() {
         if (giay === 0) {
             if (phut === 0) {
                 // ==========================================================
-                // 🔥 CHÍNH LÀ CHỖ NÀY: ĐỒNG HỒ VỪA CHẠY VỀ 00:00 (HẾT 25 PHÚT)
+                // CHÍNH LÀ CHỖ NÀY: ĐỒNG HỒ VỪA CHẠY VỀ 00:00 (HẾT 25 PHÚT)
                 // ==========================================================
                 clearInterval(boDem); // Dừng đồng hồ lại
                 
                 // 1. Gọi sang cổng 8080 báo cho Java biết để cộng tiền
-                fetch('http://localhost:8080/api/player/reward?minutes=1', { 
+                fetch('http://localhost:8080/api/player/reward?minutes=25', { 
                     method: 'POST' 
                 })
                 .then(res => res.json())
@@ -111,14 +111,14 @@ nutStart.addEventListener('click', function() {
     phut = 25;
     giay = 0;
     dangTamDung = false;
-    hienThi.innerText = "1:00";
+    hienThi.innerText = "25:00";
     batDauDemNguoc();
 });
 
 // --- NÚT STOP (DỪNG HẲN) ---
 nutStop.addEventListener('click', function() {
     clearInterval(boDem); // Dừng ngay bộ đếm
-    hienThi.innerText = "1:00"; // Chữ nhảy về 25:00
+    hienThi.innerText = "25:00"; // Chữ nhảy về 25:00
     datLaiGiaoDien(); // Thu dọn các nút bấm
 });
 
@@ -270,8 +270,8 @@ nutStart.addEventListener('click', function() {
     nutStop.classList.remove('nut-an');
     nutPause.classList.remove('nut-an');
     
-phut = 1; giay = 0;
+phut = 25; giay = 0;
     dangTamDung = false;
-    hienThi.innerText = "1:00";
+    hienThi.innerText = "25:00";
     batDauDemNguoc();
 });

@@ -1,4 +1,4 @@
-package com.thphatts.promodo;
+package com.thphatts.promodo.Models;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -17,6 +17,7 @@ public class User {
 
     private int coins;
     private int petFullness;
+    private int petHappiness;
 
     public User() {
     }

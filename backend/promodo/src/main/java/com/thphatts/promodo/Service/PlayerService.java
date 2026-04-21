@@ -1,8 +1,11 @@
-package com.thphatts.promodo;
+package com.thphatts.promodo.Service;
 
 import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import com.thphatts.promodo.Models.User;
+import com.thphatts.promodo.Repository.UserRepository;
 
 @Service
 public class PlayerService {

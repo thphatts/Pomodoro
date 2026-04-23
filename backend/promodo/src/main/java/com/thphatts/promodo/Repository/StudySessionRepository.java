@@ -1,10 +1,10 @@
-package com.thphatts.promodo.Repository;
+package com.thphatts.promodo.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
-import com.thphatts.promodo.Models.StudySession;
+import com.thphatts.promodo.models.StudySession;
 
 import java.util.Map;
 

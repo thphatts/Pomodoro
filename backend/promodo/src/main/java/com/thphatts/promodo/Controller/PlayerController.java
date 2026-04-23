@@ -1,14 +1,14 @@
-package com.thphatts.promodo.Controller;
+package com.thphatts.promodo.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import com.thphatts.promodo.Models.StudySession;
-import com.thphatts.promodo.Models.User;
-import com.thphatts.promodo.Repository.StudySessionRepository;
-import com.thphatts.promodo.Repository.UserRepository;
-import com.thphatts.promodo.Service.PlayerService;
+import com.thphatts.promodo.models.StudySession;
+import com.thphatts.promodo.models.User;
+import com.thphatts.promodo.repository.StudySessionRepository;
+import com.thphatts.promodo.repository.UserRepository;
+import com.thphatts.promodo.service.PlayerService;
 
 import java.util.Map;
 
@@ -22,13 +22,6 @@ public class PlayerController {
 
     @Autowired
     private StudySessionRepository sessionRepository;
-
-    // 1.api xem tất cả dữ liệu
-    @GetMapping("/all")
-    public ResponseEntity<?> getAllData() {
-        // Lấy sạch mọi thứ trong bảng User ra
-        return ResponseEntity.ok(userRepository.findAll());
-    }
 
     @Autowired
     private PlayerService playerService;

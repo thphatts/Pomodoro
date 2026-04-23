@@ -1,4 +1,4 @@
-package com.thphatts.promodo.Models;
+package com.thphatts.promodo.models;
 
 import jakarta.persistence.*;
 import lombok.Data;

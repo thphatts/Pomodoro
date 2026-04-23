@@ -16,7 +16,6 @@ let dangTamDung = false; // Biến để theo dõi xem có đang Pause hay khôn
 // ==========================================
 // 2. CÁC HÀM XỬ LÝ CHUNG (Viết sẵn để dùng lại)
 // ==========================================
-
 // Hàm chạy đếm ngược
 // Hàm chạy đếm ngược (ĐÃ TÍCH HỢP API CỦA JAVA BACKEND)
 function batDauDemNguoc() {
@@ -149,7 +148,7 @@ nutVi.addEventListener('click', async function() {
     if (bangTien.classList.contains('nut-an')) {
         // TRƯỚC KHI HIỆN VÍ, GỌI JAVA ĐỂ LẤY SỐ DƯ
         try {
-            let response = await fetch('http://localhost:8080/api/player/status');
+            let response = await fetch('http://localhost:8080/api/status');
             let data = await response.json();
             // Đắp số tiền thật vào màn hình (Thay thẻ <span> số tiền)
             document.getElementById('so-tien').innerText = data.coins;

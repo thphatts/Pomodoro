@@ -24,13 +24,14 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.csrf(csrf -> csrf.disable()) // Tắt CSRF
                 .authorizeHttpRequests(auth -> auth
-                        // 1. SẢNH CHỜ: Ai cũng vào được (Đăng ký, Đăng nhập)
+                        // 1.Ai cũng vào được (Đăng ký, Đăng nhập)
                         .requestMatchers("/api/auth/**").permitAll()
 
-                        // 2. PHÒNG VIP: Phải có mộc xác thực của Lính canh mới được vào
-                        .requestMatchers("/api/player/**", "/api/session/**").authenticated()
+                        // 2.Phải có token mới được vào
+                        .requestMatchers("/api/player/**", "/api/session/**", "/api/rooms/**"/* , /new api */)
+                        .authenticated()
 
-                        // Các đường dẫn khác thì đóng cửa hết
+                        // Các đường dẫn khác thì đóng cửa hết nếu thêm api thì thêm ở 2.
                         .anyRequest().denyAll())
                 // 3. Bố trí lính canh đứng TRƯỚC cửa chính
                 .addFilterBefore(jwtFilter,

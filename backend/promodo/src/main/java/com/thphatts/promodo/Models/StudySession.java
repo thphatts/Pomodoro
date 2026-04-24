@@ -12,7 +12,10 @@ public class StudySession {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private Long userId;
+    // Thiết lập mối quan hệ N-1 (Nhiều Phiên học thuộc về 1 User)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
     private int durationMinutes;
     private LocalDateTime createdAt = LocalDateTime.now();
 }

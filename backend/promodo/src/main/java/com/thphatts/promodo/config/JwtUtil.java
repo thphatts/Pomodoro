@@ -1,5 +1,6 @@
 package com.thphatts.promodo.config;
 
+import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
@@ -23,5 +24,14 @@ public class JwtUtil {
                 .setExpiration(new Date(System.currentTimeMillis() + EXPIRE_DURATION))
                 .signWith(key)
                 .compact();
+    }
+
+    // Hàm đọc và kiểm tra token
+    public Claims extractClaims(String token) {
+        return Jwts.parserBuilder()
+                .setSigningKey(key)
+                .build()
+                .parseClaimsJws(token)
+                .getBody(); // Nếu token giả hoặc hết hạn, dòng này sẽ tự động báo lỗi văng ra ngoài
     }
 }

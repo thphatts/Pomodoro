@@ -1,5 +1,6 @@
 package com.thphatts.promodo.config;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -16,11 +17,25 @@ public class SecurityConfig {
         return new BCryptPasswordEncoder();
     }
 
+    @Autowired
+    private JwtFilter jwtFilter; // gọi filter để check token hợp lệ
+
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http.csrf(csrf -> csrf.disable())
+        http.csrf(csrf -> csrf.disable()) // Tắt CSRF
                 .authorizeHttpRequests(auth -> auth
-                        .anyRequest().permitAll());
+                        // 1. SẢNH CHỜ: Ai cũng vào được (Đăng ký, Đăng nhập)
+                        .requestMatchers("/api/auth/**").permitAll()
+
+                        // 2. PHÒNG VIP: Phải có mộc xác thực của Lính canh mới được vào
+                        .requestMatchers("/api/player/**", "/api/session/**").authenticated()
+
+                        // Các đường dẫn khác thì đóng cửa hết
+                        .anyRequest().denyAll())
+                // 3. Bố trí lính canh đứng TRƯỚC cửa chính
+                .addFilterBefore(jwtFilter,
+                        org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter.class);
+
         return http.build();
     }
 }

@@ -25,7 +25,7 @@ public class SecurityConfig {
         http.csrf(csrf -> csrf.disable()) // Tắt CSRF
                 .authorizeHttpRequests(auth -> auth
                         // 1.Ai cũng vào được (Đăng ký, Đăng nhập)
-                        .requestMatchers("/api/auth/**").permitAll()
+                        .requestMatchers("/api/auth/**", "/ws/**").permitAll()
 
                         // 2.Phải có token mới được vào
                         .requestMatchers("/api/player/**", "/api/session/**", "/api/rooms/**"/* , /new api */)

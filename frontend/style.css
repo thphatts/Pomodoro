@@ -1,6 +1,6 @@
 body {
     margin: 0;
-    background-color: #e5f0fa; 
+    background-color: #e5f0fa;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -8,208 +8,173 @@ body {
     overflow: hidden;
 }
 
+* { box-sizing: border-box; }
 
 .khung-game {
     position: relative;
     width: 100vw;
     height: 100vh;
-    /* Công thức ma thuật giữ đúng tỉ lệ khung hình */
     max-width: calc(100vh * (1920 / 1080));
     max-height: calc(100vw * (1080 / 1920));
+    overflow: hidden;
 }
 
-/* 3. Ảnh nền lấp đầy khung game */
+.khung-game::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0);
+    opacity: 0;
+    transition: opacity 0.28s ease;
+    pointer-events: none;
+    z-index: 110;
+}
+
+.khung-game.shop-dang-mo::after {
+    opacity: 0;
+}
+
 .anh-nen {
     position: absolute;
-    top: 0; left: 0;
-    width: 100%; height: 100%;
-    object-fit: cover;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    object-position: center;
     image-rendering: pixelated;
     z-index: -1;
 }
 
-
-
-
-
-
-/* 5. NÚT START */
 .nut-start {
     position: absolute;
     image-rendering: pixelated;
     cursor: pointer;
-    width: calc( 275 / 1920 * 100%);
-    left: calc( 135/ 1920 * 100%);
-    top: calc( 728 / 1080 * 100%);
-
-    /* Vị trí ban đầu: Đẩy sang trái khỏi màn hình */
-    left: -300px; 
+    width: calc(275 / 1920 * 100%);
+    left: -300px;
+    top: calc(728 / 1080 * 100%);
     opacity: 0;
-    transition: all 0.8s cubic-bezier(0.25, 1, 0.5, 1); /* Hiệu ứng trượt mượt */
+    transition: all 0.8s cubic-bezier(0.25, 1, 0.5, 1);
     z-index: 101;
 }
 
-/* Class mới để kích hoạt khi bấm Ready */
 .nut-start-hien {
-    left: calc(135 / 1920 * 100%) !important; /* Vị trí thật của nút */
+    left: calc(135 / 1920 * 100%) !important;
     opacity: 1 !important;
 }
-    
 
-/* Lớp dùng để ẩn nút mặc định */
-.nut-an {
-    display: none !important;
-}
+.nut-an { display: none !important; }
 
-
-
-/* Định vị nút Stop và Pause bằng đúng công thức calc của nút Start */
-.nut-stop, .nut-pause {
+.nut-stop,
+.nut-pause {
     position: absolute;
-    pointer-events: auto !important; /* Ép nhận chuột */
+    pointer-events: auto !important;
     cursor: pointer !important;
     image-rendering: pixelated;
-    
-    width: calc(275 / 1920 * 100%);  /* Giống nút start */
-    left: calc(135 / 1920 * 100%);   /* Giống nút start */
-    
+    width: calc(275 / 1920 * 100%);
+    left: calc(135 / 1920 * 100%);
     z-index: 20;
 }
 
+.nut-stop { top: calc(728 / 1080 * 100%); }
+.nut-pause { top: calc(850 / 1080 * 100%); }
 
-/* Nút Stop nằm ở vị trí Start cũ */
-.nut-stop {
-    top: calc(728 / 1080 * 100%);
-}
-
-/* Nút Pause nằm thấp hơn một chút để không bị đè */
-.nut-pause {
-    top: calc(850 / 1080 * 100%); /* Chỉnh số 850 tùy theo ý bạn */
-}
-
-
-
-
-.nut-cua-hang{
+.nut-cua-hang {
     position: absolute;
-   width: calc( 100 / 1920 * 100%);
-    left: calc( 1597/ 1920 * 100%);
-     top: calc( 102 / 1080 * 100%);
-    cursor: pointer; 
+    width: calc(100 / 1920 * 100%);
+    left: calc(1597/ 1920 * 100%);
+    top: calc(102 / 1080 * 100%);
+    cursor: pointer;
 }
-
 
 .vi-tien {
     position: absolute;
-   width: calc( 100 / 1920 * 100%);
-    left: calc( 1490/ 1920 * 100%);
-     top: calc( 102 / 1080 * 100%);
-    cursor: pointer; 
+    width: calc(100 / 1920 * 100%);
+    left: calc(1490/ 1920 * 100%);
+    top: calc(102 / 1080 * 100%);
+    cursor: pointer;
 }
-.thanh-thuc-an{
-     position: absolute;
-   width: calc( 341/ 1920 * 100%);
-    left: calc(190/ 1920 * 100%);
-     top: calc( 77/ 1080 * 100%);
-   
 
+.thanh-thuc-an {
+    position: absolute;
+    width: calc(341/ 1920 * 100%);
+    left: calc(190/ 1920 * 100%);
+    top: calc(77/ 1080 * 100%);
 }
-.thanh-cam-xuc{
-position: absolute;
-   width: calc( 330/ 1920 * 100%);
-    left: calc( 201/ 1920 * 100%);
-     top: calc( 136/ 1080 * 100%);
-   
+
+.thanh-cam-xuc {
+    position: absolute;
+    width: calc(330/ 1920 * 100%);
+    left: calc(201/ 1920 * 100%);
+    top: calc(136/ 1080 * 100%);
 }
-  
 
 .nut-start, .nut-cua-hang, .vi-tien, .nut-pause, .nut-stop, .nut-ready {
-    transition: transform 0.2s ease; /* Tạo hiệu ứng mượt khi phóng to */
+    transition: transform 0.2s ease;
 }
 
 .nut-start:hover, .nut-cua-hang:hover, .vi-tien:hover, .nut-pause:hover, .nut-stop:hover, .nut-ready:hover {
-    transform: scale(1.7); /* Phóng to nhẹ khi di chuột vào */
-    filter: brightness(1.3); /* Làm sáng nút lên một chút */
+    transform: scale(1.7);
+    filter: brightness(1.3);
 }
 
-.nut-start:active, .nut-cua-hang:active, .vi-tien:active,.nut-pause:active, .nut-stop:active, .nut-ready:active {
-    transform: scale(0.95); /* Thu nhỏ lại khi nhấn chuột xuống (tạo cảm giác nhấn nút) */
+.nut-start:active, .nut-cua-hang:active, .vi-tien:active, .nut-pause:active, .nut-stop:active, .nut-ready:active {
+    transform: scale(0.95);
 }
 
 .chu-meo {
-    position: relative !important; 
-    width: calc(425 / 1920 * 100vw); 
+    position: relative !important;
+    width: calc(425 / 1920 * 100vw);
     bottom: calc(168 / 1080 * 100%);
     height: auto;
     image-rendering: pixelated;
     display: block;
 }
+
 .cum-meo-game {
     position: absolute;
-    /* Tọa độ này đưa con mèo xuống sàn nhà */
     left: calc(717 / 1920 * 100%);
-    bottom: calc(168 / 1080 * 100%); /* Chỉnh số 100 này để mèo lên/xuống sàn */
-    
+    bottom: calc(168 / 1080 * 100%);
     display: flex;
-    flex-direction: column-reverse; /* Bảng ở trên, mèo ở dưới */
-    align-items: center;           /* Căn giữa bảng theo mèo */
-    gap: 10px;                     /* Khoảng cách giữa bảng và đầu mèo */
+    flex-direction: column-reverse;
+    align-items: center;
+    gap: 10px;
     z-index: 10;
 }
-  
 
-  
 #cum-dem-gio {
     position: absolute;
-    top: -120px; /* Chỉnh số này để bảng bay cao hay thấp trên đầu mèo */
+    top: -120px;
     left: 45%;
     transform: translateX(-50%);
-    width: 200px; /* Đặt chiều rộng bảng nhỏ lại */
+    width: 200px;
     height: auto;
-    
-    display: flex;   
-    justify-content: center;
+    display: flex;
+    flex-direction: column;
     align-items: center;
-    z-index: 20;
-
-    flex-direction: column; /* Xếp theo hàng dọc */
-    align-items: center;    /* Căn giữa bảng so với mèo */
-    
+    justify-content: center;
     gap: 10px;
     transition: opacity 0.5s;
-
-    
+    z-index: 20;
 }
 
-.anh-nen-bang {
-    width: 100%; /* Ảnh bảng sẽ to bằng cái khung 120px ở trên */
-    height: auto;
-    display: block;
-}
+.anh-nen-bang { width: 100%; height: auto; display: block; }
 
 #so-giay {
-    
-    position: absolute; /* Ép chữ nằm đè lên ảnh */
+    position: absolute;
     color: black;
-    font-family: 'Courier New', monospace;
     font-weight: bold;
-    font-size: 40px;
-     line-height: 1;
+    font-size: 20px;
+    line-height: 1;
     margin: 0 auto;
     padding: 0;
-     margin-top: -7px;
-     
-
-    top: 50%; /*tự tính toánasfdf*/
-    left:50%;
+    margin-top: -7px;
+    top: 50%;
+    left: 50%;
     transform: translate(-50%, -50%);
-  
-    font-family: 'Press Start 2P', cursive; /* Gọi font pixel ra hoạt động */ /* Bạn có thể tăng giảm số này để chữ vừa vặn với cái bảng */
-    font-size: 20px;
-    color: black; 
+    font-family: 'Press Start 2P', cursive;
 }
 
-/* Class để ẩn hiện */
 .bang-an {
     opacity: 0;
     margin: 0;
@@ -229,188 +194,647 @@ position: absolute;
     align-items: center;
 }
 
-/* Hiệu ứng nảy cái bốp */
 .hieu-ung-bop {
-    display: flex !important; /* Hiện bảng */
+    display: flex !important;
     animation: pop-up 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
 @keyframes pop-up {
-    0% { transform: translate(-50%, -50%) scale(0); } /* Từ không có gì */
-    80% { transform: translate(-50%, -50%) scale(1.1); } /* Phóng to hơn mức thường */
-    100% { transform: translate(-50%, -50%) scale(1); } /* Co lại chuẩn */
+    0% { transform: translate(-50%, -50%) scale(0); }
+    80% { transform: translate(-50%, -50%) scale(1.1); }
+    100% { transform: translate(-50%, -50%) scale(1); }
 }
 
-.anh-bang-tien {
-    width: 250px; /* Chỉnh độ to nhỏ của cái ví lúc nhảy ra */
-    height: auto;
-}
-
-#so-tien {
-    position: absolute;
-    color: white;
-    font-size: 30px;
-    font-weight: bold;
-    font-family: 'Courier New', monospace;
-    margin-right: 20px; /* Chỉnh cho số nằm đúng ô trong ví */
-}
-
-#so-tien {
-    position: absolute;
-    color: white;
-    font-size: 30px; /* Bạn có thể chỉnh lại cho vừa ô */
-    font-weight: 400; /* Pixelify Sans thường đẹp nhất ở mức 400 */
-    font-family: "Pixelify Sans", sans-serif;
-    
-    /* Ép trình duyệt hiển thị sắc nét, không làm mờ mép chữ */
-    text-rendering: optimizeSpeed;
-    -webkit-font-smoothing: none;
-    -moz-osx-font-smoothing: grayscale;
-    
-    margin-right: 20px;
-}
+.anh-bang-tien { width: 250px; height: auto; }
 
 #cum-meo {
     position: absolute;
     bottom: 15%;
     left: 50%;
     transform: translateX(-50%);
-    transition: all 0.5s cubic-bezier(0.25, 1, 0.5, 1);
+    transition: all 0.6s cubic-bezier(0.22, 1, 0.36, 1); 
     z-index: 10;
 }
 
-/* Class để đẩy mèo sang trái */
 .meo-sang-trai {
-    left: 25% !important;
-    transform: translateX(-50%) scale(0.9) !important;
+    left: 20% !important; 
+    transform: translateX(-50%) scale(0.85) !important;
 }
 
-/* Thiết lập cho màn hình Shop */
 #man-hinh-shop {
     position: absolute;
     top: 0;
-    right: 0;
+    left: 0;
     width: 100%;
     height: 100%;
-    z-index: 100;
+    z-index: 140;
     display: flex;
     justify-content: flex-end;
-    transition: transform 0.5s cubic-bezier(0.25, 1, 0.5, 1);
+    align-items: center;
+    transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.25s ease-out;
+    transform: translate3d(0, 0, 0);
+    opacity: 1;
+    will-change: transform, opacity;
+    backface-visibility: hidden;
 }
 
 .shop-an {
-    transform: translateX(100%);
+    transform: translate3d(100%, 0, 0);
+    opacity: 0;
+    visibility: hidden;
     pointer-events: none;
 }
 
 .shop-hien {
-    transform: translateX(0);
+    transform: translate3d(0, 0, 0);
+    opacity: 1;
+    visibility: visible;
     pointer-events: auto;
 }
 
 .khung-noi-dung-shop {
     position: relative;
-    width: 55%; /* Độ rộng shop như ảnh yêu cầu */
+    width: 52%;
     height: 100%;
+    transform: translate3d(0, -10px, 0);
+    will-change: transform;
 }
 
-.anh-nen-shop {
+.cua-hang {
+    position: absolute;
+    inset: 0;
     width: 100%;
     height: 100%;
     object-fit: contain;
+    object-position: right top;
     image-rendering: pixelated;
 }
 
-.nut-quay-lai {
+.danh-sach-do-an {
     position: absolute;
-    top: 50px;
-    left: -30px;
-    width: 60px;
-    cursor: pointer;
-    z-index: 1001;
+    top: 150px;
+    right: 73px;
+    width: 412px;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    justify-items: center;
+    row-gap: 15px;
+    column-gap: 25px;
+    z-index: 1200;
 }
 
-/* Các class phụ trợ */
-.nut-an { display: none !important; }
+.shop-item-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+    width: 124px;
+    min-height: 178px;
+    cursor: pointer;
+}
 
-/* --- PHẦN 1: THIẾT LẬP LỚP PHỦ TỐI VÀ HIỆU ỨNG SÁNG --- */
+.shop-item-square {
+    width: 120px;
+    height: 120px;
+    background-color: #D4B696;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    transition: transform 0.4s ease;
+}
+
+.shop-item-card:hover .shop-item-square:not(.empty) {
+    transform: scale(1.12);
+    filter: brightness(1.18);
+}
+
+.shop-item-img {
+    width: 90%;
+    max-height: 86%;
+    object-fit: contain;
+    image-rendering: pixelated;
+    z-index: 1;
+}
+
+.shop-item-gia {
+    position: relative;
+    margin-top: 7px;
+    background: #ffffff;
+    border: 2px solid #272727;
+    color: #191919;
+    font-family: "Pixelify Sans", sans-serif;
+    font-size: 19px;
+    font-weight: bold;
+    line-height: 1;
+    padding: 2px 8px;
+    z-index: 2;
+}
+
+.shop-item-owned {
+    position: absolute;
+    top: 4px;
+    right: 4px;
+    min-width: 20px;
+    background: #fff;
+    border: 1px solid #272727;
+    color: #202020;
+    font-family: "Pixelify Sans", sans-serif;
+    font-size: 14px;
+    line-height: 1;
+    padding: 2px;
+    z-index: 3;
+}
+
+.shop-buy-btn {
+    margin-top: 17px;
+    width: 150px;
+    height: 65px;
+    margin-left: 50px;
+    border: 0;
+    background: url("asset/nutbuy.PNG") center/100% 100% no-repeat;
+    background-color: transparent;
+    color: transparent;
+    font-family: "Pixelify Sans", sans-serif;
+    font-size: 50px;
+    line-height: 10;
+    text-transform: lowercase;
+    cursor: pointer;
+    padding: 0;
+    transition: transform 0.3s ease, filter 0.12s ease;
+    z-index: 1260;
+    text-indent: -9999px;
+    overflow: hidden;
+    justify-items: center;
+}
+
+.shop-item-square.empty+.shop-item-gia,
+.shop-item-square.empty~.shop-buy-btn,
+.shop-item-square.empty~.shop-item-owned {
+    display: none;
+}
+
+.shop-buy-btn:hover { transform: scale(1.06); filter: brightness(1.1); }
+.shop-buy-btn:active { transform: scale(0.98); }
+
 .lop-phu-toi {
     position: absolute;
-    top: 0; left: 0;
-    width: 100%; height: 100%;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
     background-color: black;
-    opacity: 0.7; /* Độ tối 70% lúc đầu */
-    z-index: 90; /* Nằm trên ảnh nền nhưng dưới các màn hình UI */
-    transition: opacity 0.5s ease-out; /* Hiệu ứng sáng bừng mượt mà */
-    pointer-events: none; /* Không cho bấm vào lớp tối */
-}
-
-/* Class để làm sáng bừng màn hình khi bấm Ready */
-.man-hinh-sang-bung {
-    opacity: 0 !important; /* Biến mất hoàn toàn */
-}
-
-/* --- PHẦN 2: THIẾT LẬP HIỆU ỨNG TRƯỢT MÀN HÌNH --- */
-.khung-game > div {
-    transition: opacity 0.5s cubic-bezier(0.25, 1, 0.5, 1);
-}
-
-.man-hinh-hien {
-    opacity: 1;
-    pointer-events: auto;
-    z-index: 100;
-}
-
-.man-hinh-an {
-    opacity: 0;
+    opacity: 0.7;
+    z-index: 90;
+    transition: opacity 0.5s ease-out;
     pointer-events: none;
-    z-index: -10;
 }
 
-/* --- PHẦN 3: ĐỊNH VỊ LOGO WABOUME TO Ở CHÍNH GIỮA --- */
-   #cum-waboume-chinh-giua {
+.man-hinh-sang-bung { opacity: 0 !important; }
+
+.khung-game>div { transition: opacity 0.5s cubic-bezier(0.25, 1, 0.5, 1); }
+.man-hinh-hien { opacity: 1; pointer-events: auto; z-index: 100; }
+.man-hinh-an { opacity: 0; pointer-events: none; z-index: -10; }
+
+#cum-waboume-chinh-giua {
     position: absolute;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
     display: flex;
-    flex-direction: column; /* Xếp chồng dọc */
+    flex-direction: column;
     align-items: center;
-    gap: 0px; /* Khoảng cách giữa logo và nút ready */
+    gap: 0px;
     z-index: 100;
     width: 100%;
 }
-.logo-waboume-lon {
-    width: 60%; /* Tăng kích thước to ra (60% chiều rộng khung game) */
-    max-width: 800px;
-    height: auto;
-    image-rendering: pixelated;
-}
+
+.logo-waboume-lon { width: 60%; max-width: 800px; height: auto; image-rendering: pixelated; }
 
 .nut-ready {
     width: 250px;
     cursor: pointer;
     image-rendering: pixelated;
     transition: transform 0.2s;
+    margin-top: 5px;
+}
+.nut-ready:hover { transform: scale(1.1); }
+
+#start-btn { display: none; }
+.logo-weboume { margin-bottom: 5px; }
+
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.45);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 5000;
 }
 
-.nut-ready:hover {
-    transform: scale(1.1);
+.pixel-popup {
+    position: relative;
+    width: min(62vw, 500px);
+    aspect-ratio: 1.19 / 1;
+    image-rendering: pixelated;
 }
 
-/* Nút START lúc ẩn */
-.nut-an {
-    display: none !important;
+.popup-bg { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; image-rendering: pixelated; pointer-events: none; }
+
+.close-icon {
+    position: absolute;
+    top: 5.6%;
+    right: 7.4%;
+    z-index: 3;
+    border: 0;
+    background: transparent;
+    color: transparent;
+    width: clamp(52px, 7vw, 86px);
+    height: clamp(52px, 7vw, 86px);
+    cursor: pointer;
+    transition: transform 0.12s ease;
 }
 
-#start-btn {
-    display: none; /* Ẩn nút ngay khi tải trang */
+.close-icon:hover { transform: scale(1.08); }
+.close-icon:active { transform: scale(0.94); }
+
+.time-display-box {
+    position: absolute;
+    top: 24%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 62%;
+    height: 21%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 2;
 }
 
-.logo-weboume {
-    margin-bottom: 5px; /* Giảm khoảng cách phía dưới */
+#current-time-val {
+    font-size: clamp(22px, 3.6vw, 46px);
+    font-family: 'Press Start 2P', 'Courier New', monospace;
+    font-weight: bold;
+    color: #050505;
+    letter-spacing: 1px;
 }
 
-.ready-button {
-    margin-top: 5px;    /* Giảm khoảng cách phía trên */
+.control-row {
+    position: absolute;
+    top: 48%;
+    left: 50%;
+    width: 52%;
+    transform: translateX(-50%);
+    display: flex;
+    justify-content: space-between;
+    z-index: 2;
+}
+
+.arrow-btn {
+    width: 44%;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0;
+    transition: transform 0.12s ease;
+}
+
+.arrow-btn img { width: 100%; height: auto; image-rendering: pixelated; }
+.arrow-btn:hover { transform: scale(1.03); }
+.arrow-btn:active { transform: scale(0.96); }
+
+.ok-btn {
+    position: absolute;
+    left: 50%;
+    bottom: 9%;
+    transform: translateX(-50%);
+    width: 30%;
+    border: 0;
+    background: transparent;
+    cursor: pointer;
+    padding: 0;
+    z-index: 2;
+    transition: transform 0.12s ease;
+}
+
+.ok-btn img { width: 100%; height: auto; image-rendering: pixelated; }
+.ok-btn:hover { transform: translateX(-50%) scale(1.04); }
+.ok-btn:active { transform: translateX(-50%) scale(0.96); }
+
+@media (max-width: 1100px) { .pixel-popup { width: min(80vw, 420px); } }
+
+.nut-quay-lai {
+    position: absolute !important;
+    top: 40px !important;
+    left: 50px !important;
+    width: 65px !important;
+    z-index: 2000 !important;
+    cursor: pointer !important;
+    pointer-events: auto !important;
+    transition: transform 0.1s ease-out !important; 
+}
+
+.nut-quay-lai:hover { transform: scale(1.2); }
+.nut-quay-lai:active { transform: scale(0.95); transition: none !important; }
+
+.bang-ten-shop {
+    position: absolute !important;
+    top: -40px !important;    
+    left: 55% !important;
+    transform: translateX(-50%) !important;
+    width: 260px !important; 
+    z-index: 1300 !important;
+    image-rendering: pixelated !important;
+    pointer-events: none !important;
+}
+
+.nut-cai-dat.nut-an { display: none !important; }
+.nut-cai-dat {
+    position: absolute !important;
+    top: 56px !important;    
+    right: 60px !important;  
+    width: 57px !important;
+    z-index: 2000 !important;
+    cursor: pointer !important;
+    image-rendering: pixelated !important;
+    transition: transform 0.2s ease !important;
+}
+
+.nut-cai-dat:hover { transform: scale(1.1) !important; }
+.nut-cai-dat:active { transform: scale(0.95) !important; }
+
+.nut-cua-hang:not(.nut-an), .vi-tien:not(.nut-an), .nut-cai-dat:not(.nut-an) {
+    display: block !important;
+    animation: hienLen 0.5s ease forwards;
+}
+
+@keyframes hienLen {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+#so-tien {
+    position: absolute;
+    color: white;
+    font-size: 45px; 
+    font-weight: 400;
+    font-family: "Pixelify Sans", sans-serif;
+    text-rendering: optimizeSpeed;
+    -webkit-font-smoothing: none;
+    top: 56%;
+    left: 45%;
+    transform: translate(-50%, -50%);
+    margin: 0; 
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    white-space: nowrap; 
+}
+
+/* ==========================================
+   BẢNG ĐĂNG KÝ
+   ========================================== */
+#signup-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.45);
+    z-index: 6000;
+}
+
+.pixel-popup-signup {
+    position: absolute;
+    top: 50%;
+    left: 52%;
+    transform: translate(-50%, -50%);
+    width: clamp(350px, 35vw, 500px); 
+    aspect-ratio: 1.33 / 1; 
+    image-rendering: pixelated;
+}
+
+.signup-bg {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    pointer-events: none; 
+}
+
+.close-signup-btn {
+    position: absolute;
+    top: 2%;
+    right: 2%;
+    width: 12%;
+    height: 12%;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    z-index: 5;
+}
+
+.signup-input {
+    position: absolute;
+    left: 10%;
+    width: 80%; 
+    height: 14%; 
+    background: transparent; 
+    border: none;
+    outline: none;
+    font-family: "Pixelify Sans", sans-serif;
+    font-size: clamp(16px, 2vw, 24px);
+    color: #000;
+    z-index: 5;
+    padding: 0 10px;
+}
+
+.username-pos { top: 28.5%; }
+.password-pos { top: 54.5%; }
+
+.btn-signup-pixel {
+    position: absolute;
+    top: 73%;
+    left: 43%;
+    transform: translateX(-50%);
+    background-color: #58A97A;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 8px 24px;
+    font-family: "Pixelify Sans", sans-serif;
+    font-size: clamp(16px, 2vw, 20px);
+    cursor: pointer;
+    z-index: 5;
+    transition: transform 0.1s, filter 0.1s;
+}
+
+.btn-signup-pixel:hover { filter: brightness(1.1); }
+.btn-signup-pixel:active { transform: translate(-50%, 2px) scale(0.95); }
+
+.signup-footer-pixel {
+    position: absolute;
+    bottom: 5%;
+    left: -5%;
+    width: 100%;
+    text-align: center;
+    font-family: "Pixelify Sans", sans-serif;
+    font-size: clamp(12px, 1.2vw, 15px);
+    color: #000;
+    z-index: 5;
+}
+
+.signup-footer-pixel a {
+    color: #3b82f6;
+    text-decoration: none;
+}
+
+.signup-footer-pixel a:hover {
+    text-decoration: underline;
+}
+
+/* ==========================================
+   BẢNG CHỌN MÈO (MỚI THÊM)
+   ========================================== */
+#choose-meow-overlay {
+    position: absolute;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background-color: rgba(0, 0, 0, 0.45);
+    display: flex; justify-content: center; align-items: center;
+    z-index: 6000;
+}
+
+.pixel-popup-choose {
+    position: relative;
+    width: clamp(400px, 45vw, 650px);
+    aspect-ratio: 1.55 / 1;
+    image-rendering: pixelated;
+}
+
+.choose-bg {
+    position: absolute; inset: 0;
+    width: 100%; height: 100%;
+    object-fit: contain; pointer-events: none;
+}
+
+/* Nút gạt trái phải CSS */
+.arrow-btn-meow {
+    position: absolute;
+    top: 48%; transform: translateY(-50%);
+    background: transparent; border: none;
+    font-family: "Pixelify Sans", sans-serif;
+    font-size: clamp(30px, 4vw, 55px); color: #000;
+    cursor: pointer; z-index: 10;
+    transition: transform 0.1s;
+}
+.arrow-btn-meow:hover { transform: translateY(-50%) scale(1.2); }
+.arrow-btn-meow:active { transform: translateY(-50%) scale(0.9); }
+.arrow-left { left: 9%; }
+.arrow-right { right: 9%; }
+
+/* Khung hiển thị mèo */
+.cat-showcase {
+    position: absolute;
+    top: 22%; left: 16%; width: 68%; height: 55%;
+    display: flex; align-items: center; justify-content: center;
+    gap: 4%; z-index: 5;
+}
+
+.cat-box {
+    display: flex; justify-content: center; align-items: center;
+    border-radius: 4px;
+}
+.side-box {
+    width: 32%; aspect-ratio: 1/1;
+    background-color: #D4B696; /* Ô nhỏ màu đậm */
+    opacity: 0.8;
+}
+.main-box {
+    width: 48%; aspect-ratio: 1/1;
+    background-color: #F1E2CD; /* Ô lớn màu nhạt */
+}
+.cat-box img {
+    max-width: 85%; max-height: 85%;
+    object-fit: contain; image-rendering: pixelated;
+}
+
+/* Nút Choose */
+.btn-choose {
+    position: absolute;
+    bottom: 11%; left: 50%; transform: translateX(-50%);
+    background-color: #F8CA4D; color: white;
+    border: 2px solid #D9A228; border-radius: 6px;
+    padding: 6px 28px;
+    font-family: "Pixelify Sans", sans-serif;
+    font-size: clamp(16px, 2vw, 24px);
+    cursor: pointer; z-index: 10;
+    box-shadow: 0 4px 0px #C79524;
+}
+.btn-choose:hover { filter: brightness(1.05); }
+.btn-choose:active {
+    transform: translate(-50%, 4px);
+    box-shadow: 0 0px 0px #C79524;
+}
+
+/* ==========================================
+   BACKGROUND MÈO ĂN (FIX LẤP ĐẦY HOÀN TOÀN)
+   ========================================== */
+.bg-meo-an {
+    position: absolute;
+    top: 0;
+    left: -6.2%;
+    width: 66%;
+    height: 100%;
+    
+    object-fit: cover;
+    object-position: left center;
+    
+    image-rendering: pixelated;
+    z-index: 0; 
+    opacity: 0; 
+    transition: opacity 0.4s ease; 
+    pointer-events: none;
+}
+
+.bg-meo-an-hien {
+    opacity: 1 !important;
+}
+
+/* ==========================================
+   VỊ TRÍ MÈO KHI MỞ SHOP (ĐÃ FIX NGỒI LÊN GHẾ)
+   ========================================== */
+.meo-sang-trai {
+    /* Đẩy mèo sang phải một chút để vào chính giữa nệm ghế */
+    left: 25% !important; 
+    
+    /* Kéo mèo tụt xuống để mông chạm mặt ghế (thay vì lơ lửng ở 15%) */
+    bottom: 6% !important;  
+    
+    transform: translateX(-50%) scale(0.85) !important;
+}
+
+.chu-meo-an {
+    position: absolute;
+    width: calc(425 / 1920 * 100vw);
+    bottom: calc(168 / 1080 * 100%);
+    height: auto;
+    image-rendering: pixelated;
+    opacity: 0;
+    z-index: 11;
+    transition: opacity 0.3s ease;
+    display: none;
+}
+
+.chu-meo-an.dang-an {
+    display: block !important;
+    opacity: 1;
 }

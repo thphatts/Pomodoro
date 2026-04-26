@@ -825,7 +825,7 @@ body {
 .chu-meo-an {
     position: absolute;
     width: calc(425 / 1920 * 100vw);
-    bottom: calc(168 / 1080 * 100%);
+    bottom: calc(0.25 / 1080 * 100%);
     height: auto;
     image-rendering: pixelated;
     opacity: 0;
@@ -835,6 +835,26 @@ body {
 }
 
 .chu-meo-an.dang-an {
+    display: block !important;
+    opacity: 1;
+}
+
+/* ==========================================
+   MÈO XÁM ĂN (MỚI THÊM)
+   ========================================== */
+.meo-xam-an {
+    position: absolute;
+    width: calc(425 / 1920 * 100vw);
+    bottom: calc(0.25 / 1080 * 100%);
+    height: auto;
+    image-rendering: pixelated;
+    opacity: 0;
+    z-index: 11;
+    transition: opacity 0.3s ease;
+    display: none;
+}
+
+.meo-xam-an.dang-an {
     display: block !important;
     opacity: 1;
 }

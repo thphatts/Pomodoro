@@ -20,7 +20,8 @@ let dangDemGio = false;
 
 // BIẾN LƯU TRỮ SKIN MÈO HIỆN TẠI (Mặc định là mèo vàng ngủ)
 let skinMeoNgu = 'asset/meongu.GIF'; 
-let skinMeoDung = 'asset/meodung.gif'; 
+let skinMeoDung = 'asset/meodung.gif';
+let skinMeoAn = 'asset/meoan.GIF'; // Mèo bình thường ăn
 
 // ==========================================
 // 2. CÁC HÀM XỬ LÝ CHUNG
@@ -384,6 +385,32 @@ function xuLyMuaHang(productId) {
     capNhatTienUI();
     renderShop();
     thongBaoShop(`Đã mua ${sp.ten}!`, 'ok');
+
+    // 🐱 HIỆN ANIMATION MÈO ĂN
+    const meoAn = document.getElementById('meo-an');
+    const meoXamAn = document.getElementById('meo-xam-an');
+    const meoChinh = document.getElementById('meo-chinh');
+    
+    if (meoChinh) {
+        // Ẩn mèo bình thường
+        meoChinh.style.opacity = '0';
+        
+        // Hiện ảnh ăn theo loại mèo được chọn
+        if (skinMeoAn === 'asset/meoan.GIF' && meoAn) {
+            meoAn.classList.add('dang-an');
+        } else if (skinMeoAn === 'asset/meoxamoan.GIF' && meoXamAn) {
+            meoXamAn.classList.add('dang-an');
+        }
+        
+        // Ẩn sau 2.5 giây (thời gian animation ăn)
+        setTimeout(() => {
+            if (meoAn) meoAn.classList.remove('dang-an');
+            if (meoXamAn) meoXamAn.classList.remove('dang-an');
+            meoChinh.style.opacity = '1';
+            // Quay lại ảnh đứng bình thường
+            if (hinhMeo) hinhMeo.src = skinMeoDung;
+        }, 2500);
+    }
 }
 
 function khoiTaoShop() {
@@ -477,11 +504,13 @@ const btnChooseCat = document.getElementById('btn-choose-cat');
 const danhSachMeo = [
     {
         hinhNgu: 'asset/meongu.GIF',    // Mèo vàng ngủ
-        hinhDung: 'asset/meodung.gif'   // Mèo vàng đứng
+        hinhDung: 'asset/meodung.GIF',  // Mèo vàng đứng
+        hinhAn: 'asset/meoan.GIF'       // Mèo vàng ăn
     },
     {
-        hinhNgu: 'asset/meoxamngu.gif', 
-        hinhDung: 'asset/meoxamdung.gif' // Mèo xám đứng
+        hinhNgu: 'asset/meoxamngu.GIF', 
+        hinhDung: 'asset/meoxamdung.GIF', // Mèo xám đứng
+        hinhAn: 'asset/meoxamoan.GIF'     // Mèo xám ăn
     }
 ];
 
@@ -522,6 +551,7 @@ if (btnChooseCat) {
         
         skinMeoNgu = meoDuocChon.hinhNgu;
         skinMeoDung = meoDuocChon.hinhDung;
+        skinMeoAn = meoDuocChon.hinhAn; // ✨ Cập nhật ảnh ăn theo mèo được chọn
 
         // Ra ngoài sảnh thì mèo tự động về tư thế NGỦ
         if (hinhMeo) hinhMeo.src = skinMeoNgu;
@@ -534,36 +564,6 @@ if (btnChooseCat) {
     });
 }
 
-function xuLyMuaHang(productId) {
-    const sp = sanPhamShop.find((item) => item.id === productId);
-    if (!sp) return;
-
-    if (viTien < sp.gia) {
-        thongBaoShop('Không đủ tiền!', 'error');
-        return;
-    }
-
-    viTien -= sp.gia;
-    khoDoAn[sp.id] = (khoDoAn[sp.id] || 0) + 1;
-
-    localStorage.setItem(SHOP_STORAGE_KEY, JSON.stringify(khoDoAn));
-    capNhatTienUI();
-    renderShop();
-    thongBaoShop(`Đã mua ${sp.ten}!`, 'ok');
-
-    // 🐱 HIỆN ANIMATION MÈO ĂN
-    const meoAn = document.getElementById('meo-an');
-    if (meoAn) {
-        meoAn.classList.add('dang-an');
-        
-        // Ẩn sau 2.5 giây (thời gian animation ăn)
-        setTimeout(() => {
-            meoAn.classList.remove('dang-an');
-            // Quay lại ảnh đứng bình thường
-            if (hinhMeo) hinhMeo.src = skinMeoDung;
-        }, 2500);
-    }
-}
 // ==========================================
 // THƯỞNG TIỀN KHI HOÀN THÀNH POMODORO
 // ==========================================

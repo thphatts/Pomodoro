@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -12,30 +11,36 @@
 <body>
     <div class="khung-game">
         <img src="asset/anhnenthat.PNG" alt="Nền phòng" class="anh-nen">
+        
+        <img src="asset/backgroundmeoan.GIF" alt="Nền mèo ăn" class="bg-meo-an" id="bg-meo-an">
 
         <div class="lop-phu-toi" id="man-hoi-toi"></div>
 
         <div id="man-hinh-bat-dau" class="man-hinh-hien">
-        <div id="cum-waboume-chinh-giua">
-            <img src="asset/nutwaboume.PNG" alt="WABOUME" class="logo-waboume-lon">
-            <img src="asset/nutready.PNG" alt="READY" class="nut-ready" id="nut-ready">
+            <div id="cum-waboume-chinh-giua">
+                <img src="asset/nutwaboume.PNG" alt="WABOUME" class="logo-waboume-lon">
+                <img src="asset/nutready.PNG" alt="READY" class="nut-ready" id="nut-ready">
+            </div>
         </div>
-    </div>
 
-    
+        <div id="man-hinh-game-chinh" class="man-hinh-an">
+            <img src="asset/nutstart.PNG" alt="START" class="nut-start nut-an" id="nut-bat-dau">
+        </div>
         
-
-        <img src="asset/nutstart.PNG" alt="START" class="nut-start" id="nut-bat-dau">
         <img src="asset/nutstop.PNG" alt="STOP" class="nut-stop nut-an" id="nut-stop">
         <img src="asset/nutpause.PNG" alt="PAUSE" class="nut-pause nut-an" id="nut-pause">
-        <img src="asset/nutshop.PNG" alt="Cửa hàng" class="nut-cua-hang" id="mo-shop">   
+        <img src="asset/nutshop.PNG" alt="Cửa hàng" class="nut-cua-hang nut-an" id="mo-shop">   
+        <img src="asset/nutcaidat.PNG" alt="Cài đặt" class="nut-cai-dat nut-an" id="nut-cai-dat">
         
         <img src="asset/thanhthucan.PNG" alt="Thanh Thức ăn" class="thanh-thuc-an">
         <img src="asset/thanhcamxuc.PNG" alt="Thanh cảm xúc" class="thanh-cam-xuc">
-        <img src="asset/nutvitien.PNG" alt="Ví tiền" class="vi-tien" id="mo-vi">
+        <img src="asset/nutvitien.PNG" alt="Ví tiền" class="vi-tien nut-an" id="mo-vi">
 
         <div class="cum-meo-game" id="cum-meo">
             <img src="asset/meongu.GIF" alt="Chú mèo" class="chu-meo" id="meo-chinh">
+           <img src="asset/meoan.GIF" alt="Mèo ăn" class="chu-meo-an" id="meo-an">
+           <img src="asset/meoxaman.GIF" alt="Mèo xám ăn" class="meo-xam-an" id="meo-xam-an">
+          
             <div id="cum-dem-gio" class="bang-an">
                 <img src="asset/bangdemgio.PNG" alt="Bảng" class="anh-nen-bang">
                 <span id="so-giay">00:00</span>
@@ -43,28 +48,82 @@
         </div>
 
         <div id="man-hinh-shop" class="shop-an">
-        <div class="khung-noi-dung-shop">
-            <img src="asset/back.PNG" alt="Quay lại" id="dong-shop" class="nut-quay-lai">
-            <img src="asset/nen-shop.PNG" alt="Nền Shop" class="anh-nen-shop">
+            <div class="khung-noi-dung-shop">
+                <img src="asset/back.PNG" alt="Quay lại" id="dong-shop" class="nut-quay-lai">
+                <img src="asset/nen-shop.PNG" alt="Nền Shop" class="anh-nen-shop">
+                <img src="asset/bangtenshop.PNG" alt="Bảng tên shop" class="bang-ten-shop">
+                <div class="danh-sach-do-an"></div>
+            </div>
         </div>
-    </div>
 
         <div id="bang-tien" class="nut-an">
             <img src="asset/bangtien.PNG" alt="Bảng tiền" class="anh-bang-tien">
-            <span id="so-tien">0</span>
+            <span id="so-tien">284</span>
         </div>
-        <div class="danh-sach-do-an">
-            <!--<img src="asset/banhkem.PNG" alt="Bánh kem" class="banh-kem">
-            <img src="asset/trasua.PNG" alt="Trà sữa" class="tra-sua">
-            <img src="asset/banhflat.PNG" alt="Bánh flat" class="banh-flat">
-            </div>-->
-            
-        </div>
-    <p></p>
-    <p></p>
-        </div>
-    
+        
+        <div id="time-popup-overlay" class="overlay" style="display: none;">
+            <div class="pixel-popup">
+                <img src="asset/bangchinhthoigian.PNG" alt="Bảng chỉnh thời gian" class="popup-bg">
+                <button class="close-icon" id="close-popup" aria-label="Đóng bảng">×</button>
 
-    <script src="script.js"></script>
+                <div class="time-display-box">
+                    <span id="current-time-val">20:00</span>
+                </div>
+
+                <div class="control-row">
+                    <button class="arrow-btn giam-btn" id="giam-time" aria-label="Giảm thời gian">
+                        <img src="asset/nutgiamthoigian.PNG" alt="Giảm">
+                    </button>
+                    <button class="arrow-btn tang-btn" id="tang-time" aria-label="Tăng thời gian">
+                        <img src="asset/nuttangthoigian.PNG" alt="Tăng">
+                    </button>
+                </div>
+
+                <button class="ok-btn" id="ok-confirm" aria-label="Xác nhận">
+                    <img src="asset/nutok.PNG" alt="OK">
+                </button>
+            </div>
+        </div>
+
+        <div id="signup-overlay" style="display: none;">
+            <div class="pixel-popup-signup">
+                <img src="asset/bangdangky.PNG" alt="Bảng đăng ký" class="signup-bg">
+                
+                <button class="close-signup-btn" id="close-signup" aria-label="Đóng"></button>
+
+                <input type="text" id="username-input" class="signup-input username-pos" autocomplete="off">
+                <input type="password" id="password-input" class="signup-input password-pos">
+
+                <button class="btn-signup-pixel" id="btn-signup">sign up</button>
+
+                <div class="signup-footer-pixel">
+                    Already have a account? <a href="#" id="link-login">Log in</a>
+                </div>
+            </div>
+        </div>
+
+        <div id="choose-meow-overlay" style="display: none;">
+            <div class="pixel-popup-choose">
+                <img src="asset/bangchonmeo.PNG" alt="Bảng chọn mèo" class="choose-bg">
+                
+                <button class="arrow-btn-meow arrow-left" id="prev-meow">&lt;</button>
+                <button class="arrow-btn-meow arrow-right" id="next-meow">&gt;</button>
+
+                <div class="cat-showcase">
+                    <div class="cat-box side-box">
+                        <img src="asset/meoxamdung.gif" id="img-side" alt="Mèo xám">
+                    </div>
+                    <div class="cat-box main-box">
+                        <img src="asset/meodung.gif" id="img-main" alt="Mèo vàng">
+                    </div>
+                </div>
+
+                <button class="btn-choose" id="btn-choose-cat">Choose</button>
+            </div>
+        </div>
+
+    </div>
+
+    <script src="Script.js"></script>
 </body>
-</html> 
+</html>

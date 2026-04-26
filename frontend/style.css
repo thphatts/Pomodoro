@@ -128,9 +128,9 @@ body {
 }
 .thanh-loi {
     position: absolute;
-    top: 7%; 
+    top: 37%; 
     left: 17%; 
-    height: 86%;
+    height: 27%;
     width: 80%; 
     overflow: hidden;
     transition: width 1s linear;

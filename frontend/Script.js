@@ -339,12 +339,23 @@ if(closePopup) {
 }
 if(okConfirm) {
     okConfirm.addEventListener('click', () => {
+        // Nếu đang đếm ngược thì phải dừng lại để tránh lỗi nhảy giây
+        clearInterval(boDem);
+        dangTamDung = false;
+        datLaiGiaoDien();
+
         // Áp dụng lên đồng hồ
         phut = macDinhPhut;
         giay = 0;
         let m = phut < 10 ? '0' + phut : phut;
         hienThi.innerText = m + ':00';
         timePopupOverlay.style.display = 'none';
+
+        // Reset lại thanh năng lượng về 100%
+        let barThucAn = document.getElementById('bar-thuc-an');
+        let barCamXuc = document.getElementById('bar-cam-xuc');
+        if(barThucAn) barThucAn.style.width = '100%';
+        if(barCamXuc) barCamXuc.style.width = '100%';
     });
 }
 if(nutTangTime) {

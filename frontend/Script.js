@@ -10,6 +10,8 @@ const hienThi = document.getElementById('so-giay');
 
 let phut = 25; 
 let giay = 0;
+let macDinhPhut = 25; // Lưu thời gian do user cài đặt
+let tiepDauMeo = 'meo'; // Tiền tố hỗ trợ đổi mèo sau này
 let boDem = null;
 let dangTamDung = false; // Biến để theo dõi xem có đang Pause hay không
 
@@ -48,8 +50,21 @@ function batDauDemNguoc() {
                     console.log("Lỗi: Không kết nối được với Server Java", err);
                 });
 
-                // 3. Reset lại giao diện (Mèo đi ngủ, hiện lại nút Start)
-                datLaiGiaoDien(); 
+                // 3. Reset lại giao diện (Mèo nhảy, hiện DONE, nút Start)
+                // Hieu ung Meo Nhay + DONE
+                if(hinhMeo) hinhMeo.classList.add('meo-nhay');
+                let bangDone = document.getElementById('bang-done');
+                if(bangDone) {
+                    bangDone.classList.remove('nut-an');
+                }
+                
+                // Mèo đi ngủ và ẩn DONE sau 4 giây 
+                setTimeout(() => {
+                    datLaiGiaoDien(); 
+                    if(hinhMeo) hinhMeo.classList.remove('meo-nhay');
+                    if(bangDone) bangDone.classList.add('nut-an');
+                }, 4000);
+                
                 return; 
                 // ==========================================================
             }
@@ -58,6 +73,15 @@ function batDauDemNguoc() {
         } else {
             giay--;      
         }
+
+        // Logic thanh năng lượng tụt
+        let tongGiayHienTai = phut * 60 + giay;
+        let tongGiayBanDau = macDinhPhut * 60;
+        let phanTram = (tongGiayHienTai / tongGiayBanDau) * 100;
+        let barThucAn = document.getElementById('bar-thuc-an');
+        let barCamXuc = document.getElementById('bar-cam-xuc');
+        if(barThucAn) barThucAn.style.width = phanTram + '%';
+        if(barCamXuc) barCamXuc.style.width = phanTram + '%';
 
         let s = giay < 10 ? "0" + giay : giay;
         let m = phut < 10 ? "0" + phut : phut;
@@ -80,7 +104,7 @@ function datLaiGiaoDien() {
     nutPause.classList.add('nut-an');
 
     // 3. Mèo đi ngủ
-    hinhMeo.src = "asset/meongu.GIF"; 
+    hinhMeo.src = `asset/${tiepDauMeo}ngu.GIF`; 
 }
 
 
@@ -99,7 +123,7 @@ nutStart.addEventListener('click', function() {
     nutPause.classList.remove('nut-an');
     nutPause.classList.add('nảy-xuong');
 
-    hinhMeo.src = "asset/meodung.GIF";
+    hinhMeo.src = `asset/${tiepDauMeo}dung.GIF`;
 
     if (bang) {
         bang.classList.remove('bang-an');
@@ -107,17 +131,26 @@ nutStart.addEventListener('click', function() {
     }
 
     // Set lại 25 phút và bắt đầu chạy
-    phut = 25;
+    phut = macDinhPhut;
     giay = 0;
     dangTamDung = false;
-    hienThi.innerText = "25:00";
+    let mString = phut < 10 ? "0" + phut : phut;
+    hienThi.innerText = mString + ":00";
     batDauDemNguoc();
 });
 
 // --- NÚT STOP (DỪNG HẲN) ---
 nutStop.addEventListener('click', function() {
     clearInterval(boDem); // Dừng ngay bộ đếm
-    hienThi.innerText = "25:00"; // Chữ nhảy về 25:00
+    let mString = macDinhPhut < 10 ? "0" + macDinhPhut : macDinhPhut;
+    hienThi.innerText = mString + ":00"; // Chữ nhảy về số phút đã set
+    
+    // Reset lại thanh năng lượng về 100%
+    let barThucAn = document.getElementById('bar-thuc-an');
+    let barCamXuc = document.getElementById('bar-cam-xuc');
+    if(barThucAn) barThucAn.style.width = '100%';
+    if(barCamXuc) barCamXuc.style.width = '100%';
+    
     datLaiGiaoDien(); // Thu dọn các nút bấm
 });
 
@@ -128,7 +161,7 @@ nutPause.addEventListener('click', function() {
         clearInterval(boDem); // Đóng băng thời gian
         dangTamDung = true;   // Ghi nhớ là đang Pause
         
-        hinhMeo.src = "asset/meongu.GIF"; // Mèo tranh thủ chợp mắt
+        hinhMeo.src = `asset/${tiepDauMeo}ngu.GIF`; // Mèo tranh thủ chợp mắt
         this.style.opacity = "0.6"; // Làm nút Pause tối đi một chút để báo hiệu
         
     } else {
@@ -136,7 +169,7 @@ nutPause.addEventListener('click', function() {
         batDauDemNguoc();     // Gọi hàm chạy tiếp (nó sẽ chạy tiếp số phút/giây đang lưu)
         dangTamDung = false;  // Tắt chế độ Pause
         
-        hinhMeo.src = "asset/meodung.GIF"; // Mèo dậy làm việc tiếp
+        hinhMeo.src = `asset/${tiepDauMeo}dung.GIF`; // Mèo dậy làm việc tiếp
         this.style.opacity = "1"; // Nút Pause sáng lại như cũ
     }
 });
@@ -264,13 +297,67 @@ if (nutReady) {
 nutStart.addEventListener('click', function() {
     // Ẩn hẳn nút Start để nhường chỗ cho Stop/Pause
     this.classList.add('nut-an'); 
-    this.classList.remove('nut-start-hien'); // Tạm thời bỏ class hiện để reset trạng thái
+    this.classList.remove('nut-start-hien');
 
     nutStop.classList.remove('nut-an');
     nutPause.classList.remove('nut-an');
     
-phut = 25; giay = 0;
+    phut = macDinhPhut; 
+    giay = 0;
     dangTamDung = false;
-    hienThi.innerText = "25:00";
+    let mString = phut < 10 ? "0" + phut : phut;
+    hienThi.innerText = mString + ":00";
     batDauDemNguoc();
 });
+
+// --- LOGIC CÀI ĐẶT THỜI GIAN THEO YÊU CẦU ---
+const timePopupOverlay = document.getElementById('time-popup-overlay');
+const closePopup = document.getElementById('close-popup');
+const okConfirm = document.getElementById('ok-confirm');
+const nutGiamTime = document.getElementById('giam-time');
+const nutTangTime = document.getElementById('tang-time');
+const currentTimeVal = document.getElementById('current-time-val');
+const btnCaiDat = document.getElementById('nut-cai-dat');
+
+function hienThiChuThoiGianPopup() {
+    if(currentTimeVal) {
+        let m = macDinhPhut < 10 ? '0' + macDinhPhut : macDinhPhut;
+        currentTimeVal.innerText = m + ':00';
+    }
+}
+
+if(btnCaiDat) {
+    btnCaiDat.addEventListener('click', () => {
+        hienThiChuThoiGianPopup();
+        timePopupOverlay.style.display = 'flex';
+    });
+}
+if(closePopup) {
+    closePopup.addEventListener('click', () => {
+        timePopupOverlay.style.display = 'none';
+    });
+}
+if(okConfirm) {
+    okConfirm.addEventListener('click', () => {
+        // Áp dụng lên đồng hồ
+        phut = macDinhPhut;
+        giay = 0;
+        let m = phut < 10 ? '0' + phut : phut;
+        hienThi.innerText = m + ':00';
+        timePopupOverlay.style.display = 'none';
+    });
+}
+if(nutTangTime) {
+    nutTangTime.addEventListener('click', () => {
+        macDinhPhut += 5;
+        if(macDinhPhut > 120) macDinhPhut = 120;
+        hienThiChuThoiGianPopup();
+    });
+}
+if(nutGiamTime) {
+    nutGiamTime.addEventListener('click', () => {
+        macDinhPhut -= 5;
+        if(macDinhPhut < 1) macDinhPhut = 1;
+        hienThiChuThoiGianPopup();
+    });
+}

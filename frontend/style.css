@@ -437,7 +437,7 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 0px;
+    gap: 30px; /* Thêm khoảng cách giữa logo và nút ready */
     z-index: 100;
     width: 100%;
 }
@@ -445,11 +445,10 @@ body {
 .logo-waboume-lon { width: 60%; max-width: 800px; height: auto; image-rendering: pixelated; }
 
 .nut-ready {
-    width: 250px;
+    width: clamp(200px, 20vw, 300px); /* Cho phép nút ready co giãn theo màn hình */
     cursor: pointer;
     image-rendering: pixelated;
     transition: transform 0.2s;
-    margin-top: 5px;
 }
 .nut-ready:hover { transform: scale(1.1); }
 

@@ -515,24 +515,7 @@ body {
     color: #050505;
     letter-spacing: 1px;
 }
-
-=======
-.ready-button {
-    margin-top: 5px;    /* Giảm khoảng cách phía trên */
 }
-
-/* Nút cài đặt */
-.nut-cai-dat {
-    position: absolute !important;
-    top: calc( 102 / 1080 * 100%) !important;    
-    left: calc( 1704 / 1920 * 100%) !important;  
-    width: calc( 100 / 1920 * 100%) !important;
-    z-index: 2000 !important;
-    cursor: pointer !important;
-    image-rendering: auto !important;
-    transition: transform 0.2s ease;
-}
-.nut-cai-dat:hover { transform: scale(1.1); }
 
 /* Hiệu ứng nhảy mèo và DONE */
 @keyframes jumpCat {
@@ -555,72 +538,7 @@ body {
     text-shadow: 2px 2px white;
     animation: hienLen 0.5s ease forwards;
 }
-@keyframes hienLen {
-    from { opacity: 0; transform: translateY(-10px) translateX(-50%); }
-    to { opacity: 1; transform: translateY(0) translateX(-50%); }
-}
 
-/* Modal Thời gian */
-.overlay {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.45);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 5000;
-}
-.pixel-popup {
-    position: relative;
-    width: min(62vw, 500px);
-    aspect-ratio: 1.19 / 1;
-    image-rendering: auto;
-}
-.popup-bg {
-    position: absolute;
-    inset: 0;
-    width: 100%;
-    height: 100%;
-    object-fit: contain;
-    pointer-events: none;
-}
-.close-icon {
-    position: absolute;
-    top: 5.6%;
-    right: 7.4%;
-    z-index: 3;
-    background: transparent;
-    border: none;
-    width: clamp(52px, 7vw, 86px);
-    height: clamp(52px, 7vw, 86px);
-    cursor: pointer;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-.close-icon:hover { transform: scale(1.08); }
-.time-display-box {
-    position: absolute;
-    top: 24%;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 62%;
-    height: 21%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 2;
-}
-#current-time-val {
-    font-size: clamp(22px, 3.6vw, 46px);
-    font-weight: bold;
-    color: #050505;
-    font-family: monospace;
-}
->>>>>>> huy/giao-dien-moi
 .control-row {
     position: absolute;
     top: 48%;
@@ -631,15 +549,12 @@ body {
     justify-content: space-between;
     z-index: 2;
 }
-<<<<<<< HEAD
 
->>>>>>> huy/giao-dien-moi
 .arrow-btn {
     width: 44%;
     background: transparent;
     border: none;
     cursor: pointer;
-<<<<<<< HEAD
     display: flex;
     justify-content: center;
     align-items: center;
@@ -650,11 +565,6 @@ body {
 .arrow-btn img { width: 100%; height: auto; image-rendering: pixelated; }
 .arrow-btn:hover { transform: scale(1.03); }
 .arrow-btn:active { transform: scale(0.96); }
-
-=======
-}
-.arrow-btn img { width: 100%; height: auto; }
-.arrow-btn:hover { transform: scale(1.03); }
 .ok-btn {
     position: absolute;
     left: 50%;

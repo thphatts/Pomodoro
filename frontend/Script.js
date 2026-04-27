@@ -85,16 +85,6 @@ function batDauDemNguoc() {
         } else {
             giay--;
         }
-        hienThi.innerText = dinhDangThoiGian(phut, giay);
-    }, 1000);
-}
-
-function dinhDangThoiGian(phutValue, giayValue = 0) {
-    const m = phutValue < 10 ? "0" + phutValue : String(phutValue);
-    const s = giayValue < 10 ? "0" + giayValue : String(giayValue);
-    return m + ":" + s;
-
-
         // Logic thanh năng lượng tụt
         let tongGiayHienTai = phut * 60 + giay;
         let tongGiayBanDau = macDinhPhut * 60;
@@ -104,15 +94,18 @@ function dinhDangThoiGian(phutValue, giayValue = 0) {
         if(barThucAn) barThucAn.style.width = phanTram + '%';
         if(barCamXuc) barCamXuc.style.width = phanTram + '%';
 
-        let s = giay < 10 ? "0" + giay : giay;
-        let m = phut < 10 ? "0" + phut : phut;
-        hienThi.innerText = m + ":" + s;
+        hienThi.innerText = dinhDangThoiGian(phut, giay);
     }, 1000);
+}
+
+function dinhDangThoiGian(phutValue, giayValue = 0) {
+    const m = phutValue < 10 ? "0" + phutValue : String(phutValue);
+    const s = giayValue < 10 ? "0" + giayValue : String(giayValue);
+    return m + ":" + s;
 }
 
 // Hàm Reset giao diện về lúc chưa bấm Start
 function datLaiGiaoDien() {
-    // 1. Hiện lại nút Start bằng cách giữ class hiệu ứng trượt
     if (nutStart) {
         nutStart.classList.remove('nut-an');
         nutStart.classList.add('nut-start-hien'); // Quan trọng: Phải có class này nút mới bay vào vị trí left: 135px
@@ -124,32 +117,11 @@ function datLaiGiaoDien() {
     nutStop.classList.add('nut-an');
     nutPause.classList.add('nut-an');
 
-    // 3. Mèo đi ngủ
-    hinhMeo.src = `asset/${tiepDauMeo}ngu.GIF`; 
-}
-
-function datLaiGiaoDien() {
-    if (nutStart) {
-        nutStart.classList.remove('nut-an');
-        nutStart.classList.add('nut-start-hien');
-        nutStart.style.pointerEvents = "auto";
-        nutStart.style.opacity = "1";
-    }
-    if (nutStop) nutStop.classList.add('nut-an');
-    if (nutPause) nutPause.classList.add('nut-an');
-    
-=======
-    nutPause.classList.remove('nut-an');
-    nutPause.classList.add('nảy-xuong');
-
-    hinhMeo.src = `asset/${tiepDauMeo}dung.GIF`;
-
->>>>>>> huy/giao-dien-moi
     if (bang) {
         bang.classList.add('bang-an');
         bang.classList.remove('bang-hien');
     }
-<<<<<<< HEAD
+
     // Gán lại hình NGỦ theo con mèo ĐANG ĐƯỢC CHỌN
     if (hinhMeo) hinhMeo.src = skinMeoNgu; 
     
@@ -160,16 +132,16 @@ function datLaiGiaoDien() {
         nutCaiDat.style.setProperty('visibility', 'visible', 'important');
         nutCaiDat.style.setProperty('opacity', '1', 'important');
         nutCaiDat.style.pointerEvents = "auto";
+    }
 
-
-    // Set lại 25 phút và bắt đầu chạy
-    phut = macDinhPhut;
-    giay = 0;
-    dangTamDung = false;
-    let mString = phut < 10 ? "0" + phut : phut;
-    hienThi.innerText = mString + ":00";
-    batDauDemNguoc();
-});
+    // 🎁 THƯỞNG TIỀN KHI HOÀN THÀNH POMODORO
+    const tienThuong = thoiGianDatTruoc * 3; // Mỗi phút được 3 xu
+    viTien += tienThuong;
+    capNhatTienUI();
+    
+    // Hiển thị thông báo thưởng
+    thongBaoShop(`+${tienThuong} xu! 🎉`, 'ok');
+}
 
 // --- NÚT STOP (DỪNG HẲN) ---
 nutStop.addEventListener('click', function() {
@@ -204,7 +176,7 @@ nutPause.addEventListener('click', function() {
         hinhMeo.src = `asset/${tiepDauMeo}dung.GIF`; // Mèo dậy làm việc tiếp
         this.style.opacity = "1"; // Nút Pause sáng lại như cũ
     }
-}
+});
 
 // ==========================================
 // 3. SỰ KIỆN BẤM CÁC NÚT (START/STOP/PAUSE)
@@ -379,43 +351,6 @@ document.addEventListener('keydown', function (event) {
 });
 
 // ==========================================
-// 6. CÀI ĐẶT THỜI GIAN
-// ==========================================
-const popupOverlay = document.getElementById('time-popup-overlay');
-const closeBtn = document.getElementById('close-popup');
-const okConfirm = document.getElementById('ok-confirm');
-const nutTangTime = document.getElementById('tang-time');
-const nutGiamTime = document.getElementById('giam-time');
-const currentTimeVal = document.getElementById('current-time-val');
-
-function moBangCaiDat() {
-    if (!popupOverlay) return;
-    if (currentTimeVal) currentTimeVal.innerText = dinhDangThoiGian(thoiGianDatTruoc);
-    popupOverlay.style.display = 'flex';
-}
-
-if (nutCaiDat) nutCaiDat.addEventListener('click', moBangCaiDat);
-if (closeBtn) closeBtn.addEventListener('click', () => popupOverlay.style.display = 'none');
-if (okConfirm) {
-    okConfirm.addEventListener('click', () => {
-        popupOverlay.style.display = 'none';
-        hienThi.innerText = dinhDangThoiGian(thoiGianDatTruoc);
-    });
-}
-
-if (nutTangTime) {
-    nutTangTime.addEventListener('click', () => {
-        thoiGianDatTruoc = Math.min(thoiGianDatTruoc + 5, 60);
-        if (currentTimeVal) currentTimeVal.innerText = dinhDangThoiGian(thoiGianDatTruoc);
-    });
-}
-
-if (nutGiamTime) {
-    nutGiamTime.addEventListener('click', () => {
-        thoiGianDatTruoc = Math.max(thoiGianDatTruoc - 5, 5);
-        if (currentTimeVal) currentTimeVal.innerText = dinhDangThoiGian(thoiGianDatTruoc);
-    });
-}
 
 // ==========================================
 // 7. HỆ THỐNG CỬA HÀNG (SHOP LOGIC)
@@ -670,10 +605,7 @@ if (btnPrevMeow) {
     });
 }
 
-nutStart.addEventListener('click', function() {
-    // Ẩn hẳn nút Start để nhường chỗ cho Stop/Pause
-    this.classList.add('nut-an'); 
-    this.classList.remove('nut-start-hien');
+
 
 // BƯỚC 3: Bấm nút CHOOSE màu vàng
 if (btnChooseCat) {
@@ -697,50 +629,7 @@ if (btnChooseCat) {
     });
 }
 
-// ==========================================
-// THƯỞNG TIỀN KHI HOÀN THÀNH POMODORO
-// ==========================================
-function datLaiGiaoDien() {
-    if (nutStart) {
-        nutStart.classList.remove('nut-an');
-        nutStart.classList.add('nut-start-hien');
-        nutStart.style.pointerEvents = "auto";
-        nutStart.style.opacity = "1";
-    }
-    if (nutStop) nutStop.classList.add('nut-an');
-    if (nutPause) nutPause.classList.add('nut-an');
-    
-    if (bang) {
-        bang.classList.add('bang-an');
-        bang.classList.remove('bang-hien');
-    }
-    if (hinhMeo) hinhMeo.src = skinMeoNgu; 
-    
-    if (nutShop) nutShop.style.pointerEvents = "auto";
-    if (nutViTop) nutViTop.style.pointerEvents = "auto";
-    
-    if (nutCaiDat) {
-        nutCaiDat.style.setProperty('visibility', 'visible', 'important');
-        nutCaiDat.style.setProperty('opacity', '1', 'important');
-        nutCaiDat.style.pointerEvents = "auto";
-    }
 
-    // 🎁 THƯỞNG TIỀN KHI HOÀN THÀNH POMODORO
-    const tienThuong = thoiGianDatTruoc * 3; // Mỗi phút được 3 xu
-    viTien += tienThuong;
-    capNhatTienUI();
-    
-    // Hiển thị thông báo thưởng
-    thongBaoShop(`+${tienThuong} xu! 🎉`, 'ok');
-}
-
-    phut = macDinhPhut; 
-    giay = 0;
-    dangTamDung = false;
-    let mString = phut < 10 ? "0" + phut : phut;
-    hienThi.innerText = mString + ":00";
-    batDauDemNguoc();
-});
 
 // --- LOGIC CÀI ĐẶT THỜI GIAN THEO YÊU CẦU ---
 const timePopupOverlay = document.getElementById('time-popup-overlay');

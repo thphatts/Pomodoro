@@ -107,6 +107,7 @@ body {
     width: calc(330/ 1920 * 100%);
     left: calc(201/ 1920 * 100%);
     top: calc(136/ 1080 * 100%);
+}
 .thanh-thuc-an-wrap {
     width: calc(341 / 1920 * 100%);
     left: calc(190 / 1920 * 100%);
@@ -513,7 +514,6 @@ body {
     font-weight: bold;
     color: #050505;
     letter-spacing: 1px;
-}
 }
 
 /* Hiệu ứng nhảy mèo và DONE */

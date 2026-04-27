@@ -11,10 +11,10 @@ const nutCaiDat = document.getElementById('nut-cai-dat');
 const nutShop = document.getElementById('mo-shop');
 const nutViTop = document.getElementById('mo-vi');
 
-let thoiGianDatTruoc = 20;
-let phut = thoiGianDatTruoc;
+let macDinhPhut = 25; // Thời gian do user cài đặt (phút)
+let thoiGianDatTruoc = macDinhPhut; // Luôn sync với macDinhPhut
+let phut = macDinhPhut;
 let giay = 0;
-let macDinhPhut = 25; // Lưu thời gian do user cài đặt
 let tiepDauMeo = 'meo'; // Tiền tố hỗ trợ đổi mèo sau này
 let boDem = null;
 let dangTamDung = false;
@@ -35,49 +35,24 @@ function batDauDemNguoc() {
             if (phut === 0) {
                 clearInterval(boDem);
                 dangDemGio = false;
-                datLaiGiaoDien();
-                return;
 
                 // ==========================================================
-                // CHÍNH LÀ CHỖ NÀY: ĐỒNG HỒ VỪA CHẠY VỀ 00:00 (HẾT 25 PHÚT)
+                // ĐỒNG HỒ VỪA CHẠY VỀ 00:00 (HẾT GIỜ)
                 // ==========================================================
-                clearInterval(boDem); // Dừng đồng hồ lại
-                
-                // 1. Gọi sang cổng 8080 báo cho Java biết để cộng tiền
-                fetch('http://localhost:8080/api/player/reward?minutes=25', { 
-                    method: 'POST' 
-                })
-                .then(res => res.json())
-                .then(data => {
-                    // Java xử lý xong trả về biến data
-                    // alert("Chúc mừng! Bạn được cộng thêm xu. Tổng ví mới: " + data.coins + " xu");
-                    
-                    // 2. Tự động đắp số tiền mới lên giao diện cho User thấy
-                    let theHienThiTien = document.getElementById('so-tien');
-                    if (theHienThiTien) {
-                        theHienThiTien.innerText = data.coins;
-                    }
-                })
-                .catch(err => {
-                    console.log("Lỗi: Không kết nối được với Server Java", err);
-                });
 
-                // 3. Reset lại giao diện (Mèo nhảy, hiện DONE, nút Start)
-                // Hieu ung Meo Nhay + DONE
+                // 1. Hiệu ứng Mèo Nhảy + DONE
                 if(hinhMeo) hinhMeo.classList.add('meo-nhay');
                 let bangDone = document.getElementById('bang-done');
-                if(bangDone) {
-                    bangDone.classList.remove('nut-an');
-                }
-                
-                // Mèo đi ngủ và ẩn DONE sau 4 giây 
+                if(bangDone) bangDone.classList.remove('nut-an');
+
+                // 2. Mèo đi ngủ và ẩn DONE sau 4 giây, rồi mới reset + thưởng tiền
                 setTimeout(() => {
-                    datLaiGiaoDien(); 
                     if(hinhMeo) hinhMeo.classList.remove('meo-nhay');
                     if(bangDone) bangDone.classList.add('nut-an');
+                    datLaiGiaoDien(true); // true = có thưởng tiền
                 }, 4000);
-                
-                return; 
+
+                return;
                 // ==========================================================
             }
             phut--;
@@ -85,7 +60,7 @@ function batDauDemNguoc() {
         } else {
             giay--;
         }
-        // Logic thanh năng lượng tụt
+        // Logic thanh năng lượng tụt (dùng macDinhPhut làm gốc)
         let tongGiayHienTai = phut * 60 + giay;
         let tongGiayBanDau = macDinhPhut * 60;
         let phanTram = (tongGiayHienTai / tongGiayBanDau) * 100;
@@ -94,7 +69,10 @@ function batDauDemNguoc() {
         if(barThucAn) barThucAn.style.width = phanTram + '%';
         if(barCamXuc) barCamXuc.style.width = phanTram + '%';
 
-        hienThi.innerText = dinhDangThoiGian(phut, giay);
+        const thoiGianHienThi = dinhDangThoiGian(phut, giay);
+        hienThi.innerText = thoiGianHienThi;
+        // Cập nhật tab title khi đang học (yêu cầu của Phát)
+        document.title = `⏱ ${thoiGianHienThi} — Mèo Pomodoro`;
     }, 1000);
 }
 
@@ -105,15 +83,15 @@ function dinhDangThoiGian(phutValue, giayValue = 0) {
 }
 
 // Hàm Reset giao diện về lúc chưa bấm Start
-function datLaiGiaoDien() {
+// tinhThuong = true chỉ khi đồng hồ tự chạy hết (không phải bấm STOP)
+function datLaiGiaoDien(tinhThuong = false) {
     if (nutStart) {
         nutStart.classList.remove('nut-an');
-        nutStart.classList.add('nut-start-hien'); // Quan trọng: Phải có class này nút mới bay vào vị trí left: 135px
+        nutStart.classList.add('nut-start-hien');
         nutStart.style.pointerEvents = "auto";
-        nutStart.style.opacity = "1"; // Đảm bảo độ sáng
+        nutStart.style.opacity = "1";
     }
 
-    // 2. Cất nút Stop và Pause đi
     nutStop.classList.add('nut-an');
     nutPause.classList.add('nut-an');
 
@@ -122,61 +100,30 @@ function datLaiGiaoDien() {
         bang.classList.remove('bang-hien');
     }
 
-    // Gán lại hình NGỦ theo con mèo ĐANG ĐƯỢC CHỌN
-    if (hinhMeo) hinhMeo.src = skinMeoNgu; 
-    
+    if (hinhMeo) hinhMeo.src = skinMeoNgu;
+
     if (nutShop) nutShop.style.pointerEvents = "auto";
     if (nutViTop) nutViTop.style.pointerEvents = "auto";
-    
+
     if (nutCaiDat) {
         nutCaiDat.style.setProperty('visibility', 'visible', 'important');
         nutCaiDat.style.setProperty('opacity', '1', 'important');
         nutCaiDat.style.pointerEvents = "auto";
     }
 
-    // 🎁 THƯỞNG TIỀN KHI HOÀN THÀNH POMODORO
-    const tienThuong = thoiGianDatTruoc * 3; // Mỗi phút được 3 xu
-    viTien += tienThuong;
-    capNhatTienUI();
-    
-    // Hiển thị thông báo thưởng
-    thongBaoShop(`+${tienThuong} xu! 🎉`, 'ok');
+    // Đặt lại tab title về bình thường
+    document.title = 'Mèo Pomodoro';
+
+    // 🎁 Chỉ thưởng tiền khi học XONG tự nhiên (không phải bấm Stop)
+    if (tinhThuong) {
+        const tienThuong = macDinhPhut * 3; // mỗi phút = 3 xu
+        viTien += tienThuong;
+        capNhatTienUI();
+        thongBaoShop(`+${tienThuong} xu! 🎉`, 'ok');
+    }
 }
 
-// --- NÚT STOP (DỪNG HẲN) ---
-nutStop.addEventListener('click', function() {
-    clearInterval(boDem); // Dừng ngay bộ đếm
-    let mString = macDinhPhut < 10 ? "0" + macDinhPhut : macDinhPhut;
-    hienThi.innerText = mString + ":00"; // Chữ nhảy về số phút đã set
-    
-    // Reset lại thanh năng lượng về 100%
-    let barThucAn = document.getElementById('bar-thuc-an');
-    let barCamXuc = document.getElementById('bar-cam-xuc');
-    if(barThucAn) barThucAn.style.width = '100%';
-    if(barCamXuc) barCamXuc.style.width = '100%';
-    
-    datLaiGiaoDien(); // Thu dọn các nút bấm
-});
-
-// --- NÚT PAUSE (TẠM DỪNG / ĐI TIẾP) ---
-nutPause.addEventListener('click', function() {
-    if (dangTamDung === false) {
-        // TRƯỜNG HỢP 1: Đang chạy -> Bấm vào để TẠM DỪNG
-        clearInterval(boDem); // Đóng băng thời gian
-        dangTamDung = true;   // Ghi nhớ là đang Pause
-        
-        hinhMeo.src = `asset/${tiepDauMeo}ngu.GIF`; // Mèo tranh thủ chợp mắt
-        this.style.opacity = "0.6"; // Làm nút Pause tối đi một chút để báo hiệu
-        
-    } else {
-        // TRƯỜNG HỢP 2: Đang tạm dừng -> Bấm vào để CHẠY TIẾP
-        batDauDemNguoc();     // Gọi hàm chạy tiếp (nó sẽ chạy tiếp số phút/giây đang lưu)
-        dangTamDung = false;  // Tắt chế độ Pause
-        
-        hinhMeo.src = `asset/${tiepDauMeo}dung.GIF`; // Mèo dậy làm việc tiếp
-        this.style.opacity = "1"; // Nút Pause sáng lại như cũ
-    }
-});
+// ⚠️ Listener trực tiếp phía trên đã bị xóa — chỉ giữ 1 bộ listener bên dưới (trong if-null-check)
 
 // ==========================================
 // 3. SỰ KIỆN BẤM CÁC NÚT (START/STOP/PAUSE)
@@ -213,11 +160,12 @@ if (nutStart) {
         if (nutViTop) nutViTop.style.pointerEvents = "none";
         if (nutCaiDat) nutCaiDat.style.pointerEvents = "none";
 
-        phut = thoiGianDatTruoc;
+        phut = macDinhPhut; // Dùng macDinhPhut (đã sync với thoiGianDatTruoc)
         giay = 0;
         dangTamDung = false;
         dangDemGio = true;
-        hienThi.innerText = dinhDangThoiGian(thoiGianDatTruoc);
+        thoiGianDatTruoc = macDinhPhut; // Sync lại để reward tính đúng
+        hienThi.innerText = dinhDangThoiGian(macDinhPhut);
         batDauDemNguoc();
     });
 }
@@ -226,8 +174,14 @@ if (nutStop) {
     nutStop.addEventListener('click', function () {
         clearInterval(boDem);
         dangDemGio = false;
-        hienThi.innerText = dinhDangThoiGian(thoiGianDatTruoc);
-        datLaiGiaoDien();
+        // STOP = không thưởng tiền (tinhThuong = false)
+        datLaiGiaoDien(false);
+        // Reset thanh năng lượng về 100%
+        const barThucAn = document.getElementById('bar-thuc-an');
+        const barCamXuc = document.getElementById('bar-cam-xuc');
+        if(barThucAn) barThucAn.style.width = '100%';
+        if(barCamXuc) barCamXuc.style.width = '100%';
+        hienThi.innerText = dinhDangThoiGian(macDinhPhut);
     });
 }
 
@@ -533,15 +487,67 @@ if (nutReady) {
     });
 }
 
-// BƯỚC 2: Bấm Sign Up (Đăng ký xong) -> Ẩn đăng ký, Hiện bảng CHỌN MÈO
-function hoanTatDangKy() {
+// BƯỚC 2: Bấm Sign Up (Đăng ký xong) -> gọi API register rồi login, sau đó chọn mèo
+async function hoanTatDangKy() {
+    const usernameInput = document.getElementById('username-input');
+    const passwordInput = document.getElementById('password-input');
+    const username = usernameInput ? usernameInput.value.trim() : '';
+    const password = passwordInput ? passwordInput.value.trim() : '';
+
+    if (!username || !password) {
+        alert('Vui lòng nhập tên đăng nhập và mật khẩu!');
+        return;
+    }
+
+    try {
+        // 1. Gọi API đăng ký
+        const regRes = await fetch('http://localhost:8080/api/auth/register', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ username, password })
+        });
+        const regData = await regRes.json();
+
+        // Nếu lỗi đăng ký (trừ trường hợp user đã tồn tại thì vẫn cho login)
+        if (regData.status === 'error' && !regData.message.includes('đã tồn tại')) {
+            alert(regData.message);
+            return;
+        }
+
+        // 2. Tự động login để lấy token
+        const loginRes = await fetch('http://localhost:8080/api/auth/login', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ username, password })
+        });
+        const loginData = await loginRes.json();
+
+        if (loginData.status !== 'success') {
+            alert('Sai mật khẩu hoặc tài khoản không tồn tại!');
+            return;
+        }
+
+        // 3. Lưu token vào localStorage để dùng cho các API sau
+        localStorage.setItem('jwt_token', loginData.token);
+        localStorage.setItem('user_id', loginData.userId);
+        localStorage.setItem('username', loginData.username);
+
+        // 4. Cập nhật số tiền từ server
+        viTien = loginData.coins || 0;
+        capNhatTienUI();
+
+    } catch (err) {
+        console.warn('Không kết nối được server, chạy offline:', err);
+        // Nếu không có server thì vẫn cho vào chơi bình thường (offline mode)
+    }
+
+    // 5. Ẩn popup đăng ký, mở bảng chọn mèo
     const bangDangKy = document.getElementById('signup-overlay');
     if (bangDangKy) bangDangKy.style.display = 'none';
 
-    // Mở bảng Chọn Mèo
     const bangChonMeo = document.getElementById('choose-meow-overlay');
     if (bangChonMeo) {
-        capNhatHinhMeo(); // Load hình mèo lên 2 hộp
+        capNhatHinhMeo();
         bangChonMeo.style.display = 'flex';
     }
 }
@@ -660,21 +666,22 @@ if(closePopup) {
 }
 if(okConfirm) {
     okConfirm.addEventListener('click', () => {
-        // Nếu đang đếm ngược thì phải dừng lại để tránh lỗi nhảy giây
         clearInterval(boDem);
         dangTamDung = false;
-        datLaiGiaoDien();
-
-        // Áp dụng lên đồng hồ
+        dangDemGio = false;
+        // Sync thoiGianDatTruoc theo giá trị mới cài đặt
+        thoiGianDatTruoc = macDinhPhut;
         phut = macDinhPhut;
         giay = 0;
-        let m = phut < 10 ? '0' + phut : phut;
-        hienThi.innerText = m + ':00';
+
+        // datLaiGiaoDien không thưởng tiền khi đang cài đặt
+        datLaiGiaoDien(false);
+
+        hienThi.innerText = dinhDangThoiGian(macDinhPhut);
         timePopupOverlay.style.display = 'none';
 
-        // Reset lại thanh năng lượng về 100%
-        let barThucAn = document.getElementById('bar-thuc-an');
-        let barCamXuc = document.getElementById('bar-cam-xuc');
+        const barThucAn = document.getElementById('bar-thuc-an');
+        const barCamXuc = document.getElementById('bar-cam-xuc');
         if(barThucAn) barThucAn.style.width = '100%';
         if(barCamXuc) barCamXuc.style.width = '100%';
     });

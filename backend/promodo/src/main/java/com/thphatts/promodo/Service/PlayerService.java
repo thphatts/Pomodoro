@@ -13,21 +13,15 @@ public class PlayerService {
     @Autowired
     private UserRepository userRepository;
 
-    @Autowired
-    private org.springframework.security.crypto.password.PasswordEncoder passwordEncoder;
-
     @PostConstruct
-    // Tạo user test để có thể login ngay khi server mới khởi động
+    // khai báo user = 1 để test data
     public void initData() {
         if (userRepository.count() == 0) {
             User testUser = new User();
-            testUser.setUsername("admin");                                    // ← có username
-            testUser.setPassword(passwordEncoder.encode("admin123"));         // ← có password đã mã hóa
-            testUser.setCoins(100);
-            testUser.setPetFullness(50);
-            testUser.setPetHappiness(50);
+            testUser.setCoins(100); // Tặng sẵn 100 xu khởi nghiệp
+            testUser.setPetFullness(50); // Mèo hơi đói
             userRepository.save(testUser);
-            System.out.println("✅ Đã tạo user test: username=admin | password=admin123 | coins=100");
+            System.out.println("Đã tạo sẵn User ID=1 với 100 xu!");
         }
     }
 

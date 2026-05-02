@@ -25,10 +25,13 @@ public class SecurityConfig {
         http.csrf(csrf -> csrf.disable()) // Tắt CSRF
                 .authorizeHttpRequests(auth -> auth
                         // 1.Ai cũng vào được (Đăng ký, Đăng nhập)
-                        .requestMatchers("/api/auth/**", "/ws/**").permitAll()
+                        .requestMatchers("/api/auth/**", "/ws/**", "/v3/api-docs/**", "/swagger-ui/**",
+                                "/swagger-ui.html")
+                        .permitAll()
 
                         // 2.Phải có token mới được vào
-                        .requestMatchers("/api/player/**", "/api/session/**", "/api/rooms/**"/* , /new api */)
+                        .requestMatchers("/api/player/**", "/api/session/**", "/api/rooms/**"/* , /new api */,
+                                "/api/gacha/**")
                         .authenticated()
 
                         // Các đường dẫn khác thì đóng cửa hết nếu thêm api thì thêm ở 2.

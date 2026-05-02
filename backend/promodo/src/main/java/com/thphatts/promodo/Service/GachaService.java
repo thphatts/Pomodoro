@@ -5,6 +5,7 @@ import com.thphatts.promodo.repository.PetCatalogRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.thphatts.promodo.exception.BusinessException;
 import java.util.List;
 
 @Service
@@ -22,10 +23,7 @@ public class GachaService {
         List<PetCatalog> allPets = petCatalogRepository.findAll();
 
         // 2. Tính tổng trọng số (Tổng tỉ lệ)
-        double totalWeight = 0.0;
-        for (PetCatalog pet : allPets) {
-            totalWeight += pet.getDropWeight();
-        }
+        double totalWeight = allPets.stream().mapToDouble(PetCatalog::getDropWeight).sum();
 
         // 3. Quay một con số ngẫu nhiên từ 0 đến Tổng trọng số
         double randomValue = Math.random() * totalWeight;
@@ -39,6 +37,8 @@ public class GachaService {
             }
         }
 
-        return allPets.get(0); // Đề phòng lỗi, trả về con mặc định
+        // This should ideally not be reached if totalWeight > 0. Handle as an exception
+        // or default.
+        throw new BusinessException("No pets available to roll or invalid gacha configuration.");
     }
 }

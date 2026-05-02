@@ -7,7 +7,12 @@ import com.thphatts.promodo.repository.UserPetRepository;
 import com.thphatts.promodo.repository.UserRepository;
 import com.thphatts.promodo.service.GachaService;
 import org.springframework.beans.factory.annotation.Autowired;
+import com.thphatts.promodo.exception.BusinessException;
+import com.thphatts.promodo.exception.ResourceNotFoundException;
 import org.springframework.http.ResponseEntity;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
@@ -29,14 +34,22 @@ public class GachaController {
     @Autowired
     private UserPetRepository userPetRepository;
 
+    @Operation(summary = "Roll a gacha egg", description = "Allows an authenticated user to roll a gacha egg for a chance to win a pet. Requires sufficient coins.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Successfully rolled an egg"),
+            @ApiResponse(responseCode = "400", description = "Insufficient coins or invalid gacha configuration"),
+            @ApiResponse(responseCode = "404", description = "User not found")
+    })
     @PostMapping("/roll")
-    public ResponseEntity<?> rollEgg(Principal principal) {
+    public ResponseEntity<Map<String, Object>> rollEgg(Principal principal) {
         // 1. Tìm người dùng đang gọi API (Dựa vào Token) và "mở hộp" Optional
-        User user = userRepository.findByUsername(principal.getName())
-                .orElseThrow(() -> new RuntimeException("Không tìm thấy người dùng này!"));
+        Long userId = Long.parseLong(principal.getName());
+        User user = userRepository.findById(userId)
+                .orElseThrow(
+                        () -> new ResourceNotFoundException("User not found with ID: " + userId));
         // 2. Kiểm tra xem có đủ tiền không?
         if (user.getCoins() < GachaService.GACHA_PRICE) {
-            return ResponseEntity.badRequest().body("Bạn không đủ xu để mở trứng! Đi học Pomodoro đi!");
+            throw new BusinessException("Insufficient coins to roll! Play Pomodoro to earn more!");
         }
 
         // 3. Trừ tiền
@@ -54,7 +67,7 @@ public class GachaController {
 
         // 6. Trả kết quả về cho Frontend để làm hiệu ứng
         Map<String, Object> response = new HashMap<>();
-        response.put("message", "Quay trứng thành công!");
+        response.put("message", "Successfully rolled an egg!");
         response.put("remainingCoins", user.getCoins());
         response.put("petWon", wonPet.getName());
         response.put("rarity", wonPet.getRarity());

@@ -757,6 +757,109 @@ body {
 }
 
 /* ==========================================
+   BẢNG ĐĂNG NHẬP (MỚI THÊM)
+   ========================================== */
+/* #login-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.45);
+    z-index: 6000;
+}
+
+.pixel-popup-login {
+    position: absolute;
+    top: 50%;
+    left: 52%;
+    transform: translate(-50%, -50%);
+    width: clamp(350px, 35vw, 500px); 
+    aspect-ratio: 1.33 / 1; 
+    image-rendering: pixelated;
+}
+
+.login-bg {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    pointer-events: none; 
+}
+
+.close-login-btn {
+    position: absolute;
+    top: 2%;
+    right: 2%;
+    width: 12%;
+    height: 12%;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    z-index: 5;
+}
+
+.login-input {
+    position: absolute;
+    left: 10%;
+    width: 80%; 
+    height: 14%; 
+    background: transparent; 
+    border: none;
+    outline: none;
+    font-family: "Pixelify Sans", sans-serif;
+    font-size: clamp(16px, 2vw, 24px);
+    color: #000;
+    z-index: 5;
+    padding: 0 10px;
+}
+
+.login-username-pos { top: 28.5%; }
+.login-password-pos { top: 54.5%; }
+
+.btn-login-pixel {
+    position: absolute;
+    top: 73%;
+    left: 43%;
+    transform: translateX(-50%);
+    background-color: #58A97A;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 8px 24px;
+    font-family: "Pixelify Sans", sans-serif;
+    font-size: clamp(16px, 2vw, 20px);
+    cursor: pointer;
+    z-index: 5;
+    transition: transform 0.1s, filter 0.1s;
+}
+
+.btn-login-pixel:hover { filter: brightness(1.1); }
+.btn-login-pixel:active { transform: translate(-50%, 2px) scale(0.95); }
+
+.login-footer-pixel {
+    position: absolute;
+    bottom: 5%;
+    left: -5%;
+    width: 100%;
+    text-align: center;
+    font-family: "Pixelify Sans", sans-serif;
+    font-size: clamp(12px, 1.2vw, 15px);
+    color: #000;
+    z-index: 5;
+}
+
+.login-footer-pixel a {
+    color: #3b82f6;
+    text-decoration: none;
+}
+
+.login-footer-pixel a:hover {
+    text-decoration: underline;
+} */
+
+/* ==========================================
    BẢNG CHỌN MÈO (MỚI THÊM)
    ========================================== */
 #choose-meow-overlay {

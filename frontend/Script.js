@@ -25,9 +25,9 @@ let dangTamDung = false;
 let dangDemGio = false;
 
 // Biến skin mèo
-let skinMeoNgu = 'asset/meongu.GIF';
+let skinMeoNgu = 'asset/meongu.gif';
 let skinMeoDung = 'asset/meodung.gif';
-let skinMeoAn = 'asset/meoan.GIF';
+let skinMeoAn = 'asset/meoan.gif';
 
 // Biến người dùng và xác thực
 let currentUser = null;
@@ -142,12 +142,63 @@ if (closeSignup) {
 }
 
 // Link login (hiện tại chưa implement đầy đủ, có thể mở rộng sau)
-if (linkLogin) {
-    linkLogin.addEventListener('click', function(e) {
-        e.preventDefault();
-        thongBaoShop('Tính năng login đang phát triển!', 'ok');
-    });
-}
+// if (linkLogin) {
+//     linkLogin.addEventListener("click", function(e) {
+//         e.preventDefault();
+//         if (signupOverlay) signupOverlay.style.display = "none";
+//         if (loginOverlay) loginOverlay.style.display = "flex"; // Assuming you have a login overlay
+//     });
+// }
+
+// const loginOverlay = document.getElementById("login-overlay");
+// const loginUsernameInput = document.getElementById("login-username-input");
+// const loginPasswordInput = document.getElementById("login-password-input");
+// const btnLogin = document.getElementById("btn-login");
+// const closeLogin = document.getElementById("close-login");
+// const linkRegister = document.getElementById("link-register");
+
+// if (btnLogin) {
+//     btnLogin.addEventListener("click", async function() {
+//         const username = loginUsernameInput ? loginUsernameInput.value.trim() : "";
+//         const password = loginPasswordInput ? loginPasswordInput.value.trim() : "";
+
+//         if (!username || !password) {
+//             thongBaoShop("Vui lòng nhập đầy đủ thông tin!", "error");
+//             return;
+//         }
+
+//         const loginResult = await apiRequest(API_BASE_URL + "/auth/login", "POST", { username, password }, false);
+
+//         if (loginResult.status === "success" && loginResult.token) {
+//             authToken = loginResult.token;
+//             currentUser = {
+//                 id: loginResult.userId,
+//                 username: loginResult.username
+//             };
+//             localStorage.setItem("auth_token", authToken);
+
+//             if (loginOverlay) loginOverlay.style.display = "none";
+//             moBangChonMeo();
+//         } else {
+//             thongBaoShop(loginResult.message || "Đăng nhập thất bại!", "error");
+//         }
+//     });
+// }
+
+// if (closeLogin) {
+//     closeLogin.addEventListener("click", function() {
+//         if (loginOverlay) loginOverlay.style.display = "none";
+//     });
+// }
+
+// if (linkRegister) {
+//     linkRegister.addEventListener("click", function(e) {
+//         e.preventDefault();
+//         if (loginOverlay) loginOverlay.style.display = "none";
+//         if (signupOverlay) signupOverlay.style.display = "flex";
+//     });
+// }
+
 
 // ==========================================
 // 4. HỆ THỐNG CHỌN MÈO
@@ -161,14 +212,14 @@ const btnChooseCat = document.getElementById('btn-choose-cat');
 
 const danhSachMeo = [
     {
-        hinhNgu: 'asset/meongu.GIF',
-        hinhDung: 'asset/meodung.GIF',
-        hinhAn: 'asset/meoan.GIF'
+        hinhNgu: 'asset/meongu.gif',
+        hinhDung: 'asset/meodung.gif',
+        hinhAn: 'asset/meoan.gif'
     },
     {
-        hinhNgu: 'asset/meoxamngu.GIF',
-        hinhDung: 'asset/meoxamdung.GIF',
-        hinhAn: 'asset/meoxamoan.GIF'
+        hinhNgu: 'asset/meoxamngu.gif',
+        hinhDung: 'asset/meoxamdung.gif',
+        hinhAn: 'asset/meoxamoan.gif'
     }
 ];
 
@@ -477,9 +528,9 @@ const danhSachDoAnEl = document.querySelector('.danh-sach-do-an');
 const SHOP_STORAGE_KEY = 'shop_inventory_v1';
 
 const sanPhamShop = [
-    { id: 'pudding', ten: 'Pudding', gia: 4, nutrition: 10, hinh: 'asset/banhflat.PNG' },
-    { id: 'tra-sua', ten: 'Milk Tea', gia: 6, nutrition: 15, hinh: 'asset/trasua.PNG' },
-    { id: 'cake', ten: 'Cake', gia: 10, nutrition: 25, hinh: 'asset/banhkem.PNG' }
+    { id: 'pudding', ten: 'Pudding', gia: 4, nutrition: 10, hinh: 'asset/banhflat.png' },
+    { id: 'tra-sua', ten: 'Milk Tea', gia: 6, nutrition: 15, hinh: 'asset/trasua.png' },
+    { id: 'cake', ten: 'Cake', gia: 10, nutrition: 25, hinh: 'asset/banhkem.png' }
 ];
 
 let khoDoAn = {};

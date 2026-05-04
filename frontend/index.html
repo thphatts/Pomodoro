@@ -26,14 +26,25 @@
         <div id="man-hinh-game-chinh" class="man-hinh-an">
             <img src="asset/nutstart.PNG" alt="START" class="nut-start nut-an" id="nut-bat-dau">
         </div>
-        
+            
         <img src="asset/nutstop.PNG" alt="STOP" class="nut-stop nut-an" id="nut-stop">
         <img src="asset/nutpause.PNG" alt="PAUSE" class="nut-pause nut-an" id="nut-pause">
         <img src="asset/nutshop.PNG" alt="Cửa hàng" class="nut-cua-hang nut-an" id="mo-shop">   
         <img src="asset/nutcaidat.PNG" alt="Cài đặt" class="nut-cai-dat nut-an" id="nut-cai-dat">
         
-        <img src="asset/thanhthucan.PNG" alt="Thanh Thức ăn" class="thanh-thuc-an">
-        <img src="asset/thanhcamxuc.PNG" alt="Thanh cảm xúc" class="thanh-cam-xuc">
+        <div class="thanh-wrap thanh-thuc-an-wrap">
+            <img src="asset/thanhthucan.PNG" alt="Thanh Thức ăn" class="thanh-frame">
+            <div class="thanh-loi" id="bar-thuc-an">
+                <img src="asset/Mức thức ăn.png" alt="Mức" class="thanh-muc">
+            </div>
+        </div>
+        
+        <div class="thanh-wrap thanh-cam-xuc-wrap">
+            <img src="asset/thanhcamxuc.PNG" alt="Thanh cảm xúc" class="thanh-frame">
+            <div class="thanh-loi" id="bar-cam-xuc">
+                <img src="asset/Mức cảm xúc.png" alt="Mức" class="thanh-muc">
+            </div>
+        </div>
         <img src="asset/nutvitien.PNG" alt="Ví tiền" class="vi-tien nut-an" id="mo-vi">
 
         <div class="cum-meo-game" id="cum-meo">
@@ -44,6 +55,10 @@
             <div id="cum-dem-gio" class="bang-an">
                 <img src="asset/bangdemgio.PNG" alt="Bảng" class="anh-nen-bang">
                 <span id="so-giay">00:00</span>
+            </div>
+            <!-- Bảng DONE ẩn -->
+            <div id="bang-done" class="nut-an">
+                <span class="chu-done">DONE!</span>
             </div>
         </div>
 
@@ -58,16 +73,16 @@
 
         <div id="bang-tien" class="nut-an">
             <img src="asset/bangtien.PNG" alt="Bảng tiền" class="anh-bang-tien">
-            <span id="so-tien">284</span>
+            <span id="so-tien">0</span>
         </div>
-        
+        <!-- Popup chỉnh thời gian -->
         <div id="time-popup-overlay" class="overlay" style="display: none;">
             <div class="pixel-popup">
                 <img src="asset/bangchinhthoigian.PNG" alt="Bảng chỉnh thời gian" class="popup-bg">
-                <button class="close-icon" id="close-popup" aria-label="Đóng bảng">×</button>
+                <div class="close-icon" id="close-popup" aria-label="Đóng bảng"><img src="asset/dauX.svg" alt="X" width="100%"></div>
 
                 <div class="time-display-box">
-                    <span id="current-time-val">20:00</span>
+                    <span id="current-time-val">25:00</span>
                 </div>
 
                 <div class="control-row">

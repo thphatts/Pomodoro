@@ -6,7 +6,15 @@ import com.thphatts.promodo.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
-
+import com.thphatts.promodo.dto.request.LoginRequest;
+import com.thphatts.promodo.dto.request.RegisterRequest;
+import com.thphatts.promodo.exception.BusinessException;
+import com.thphatts.promodo.exception.ResourceNotFoundException;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import jakarta.validation.Valid;
+import org.springframework.http.ResponseEntity;
 import java.util.Map;
 
 @RestController
@@ -23,47 +31,50 @@ public class AuthController {
     @Autowired
     private JwtUtil jwtUtil;
 
-    // 1. API ĐĂNG KÝ
+    @Operation(summary = "Register a new user", description = "Registers a new user with a unique username and a password. Returns a success message.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Registration successful"),
+            @ApiResponse(responseCode = "400", description = "Invalid input or username already taken")
+    })
     @PostMapping("/register")
-    public Map<String, Object> register(@RequestBody Map<String, String> payload) {
-        String username = payload.get("username");
-        String password = payload.get("password");
-
-        if (userRepository.findByUsername(username).isPresent()) {
-            return Map.of("status", "error", "message", "Tên đăng nhập đã tồn tại!");
+    public ResponseEntity<Map<String, Object>> register(@Valid @RequestBody RegisterRequest registerRequest) {
+        if (userRepository.findByUsername(registerRequest.getUsername()).isPresent()) {
+            throw new BusinessException("Username already taken!");
         }
 
         User newUser = new User();
-        newUser.setUsername(username);
-        newUser.setPassword(passwordEncoder.encode(password)); // Mã hóa pass trước khi lưu
+        newUser.setUsername(registerRequest.getUsername());
+        newUser.setPassword(passwordEncoder.encode(registerRequest.getPassword()));
         newUser.setCoins(0);
         newUser.setPetFullness(50);
         userRepository.save(newUser);
 
-        return Map.of("status", "success", "message", "Đăng ký thành công!");
+        return ResponseEntity.ok(Map.of("status", "success", "message", "Registration successful!"));
     }
 
-    // 2. API ĐĂNG NHẬP
+    @Operation(summary = "Authenticate user and get JWT token", description = "Authenticates a user with username and password, returning a JWT token upon successful login.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Login successful, returns JWT token"),
+            @ApiResponse(responseCode = "401", description = "Invalid username or password")
+    })
     @PostMapping("/login")
-    public Map<String, Object> login(@RequestBody Map<String, String> payload) {
-        String username = payload.get("username");
-        String password = payload.get("password");
-
+    public ResponseEntity<Map<String, Object>> login(@Valid @RequestBody LoginRequest loginRequest) {
         // Tìm user trong DB
-        User user = userRepository.findByUsername(username).orElse(null);
+        User user = userRepository.findByUsername(loginRequest.getUsername())
+                .orElseThrow(() -> new ResourceNotFoundException("Invalid username or password!"));
 
         // Kiểm tra user có tồn tại và pass có khớp với mã băm trong DB không
-        if (user == null || !passwordEncoder.matches(password, user.getPassword())) {
-            return Map.of("status", "error", "message", "Sai tài khoản hoặc mật khẩu!");
+        if (!passwordEncoder.matches(loginRequest.getPassword(), user.getPassword())) {
+            throw new BusinessException("Invalid username or password!");
         }
 
         // Nếu đúng cấp Token!
         String token = jwtUtil.generateToken(user.getId(), user.getUsername());
 
-        return Map.of(
+        return ResponseEntity.ok(Map.of(
                 "status", "success",
                 "token", token,
                 "userId", user.getId(),
-                "username", user.getUsername());
+                "username", user.getUsername()));
     }
 }

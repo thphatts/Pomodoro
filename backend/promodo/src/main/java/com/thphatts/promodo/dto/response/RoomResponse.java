@@ -1,4 +1,4 @@
-package com.thphatts.promodo.dto.respon;
+package com.thphatts.promodo.dto.response;
 
 import lombok.Data;
 

@@ -689,11 +689,76 @@ if (nutMuiTenBack) {
     });
 }
 
-document.addEventListener('keydown', function(event) {
-    if (event.key === 'Escape' && manHinhShop && manHinhShop.classList.contains('shop-hien')) {
-        dongShop();
+// ==========================================
+// 8.1 LOGIC ĐĂNG KÝ VÀ ĐĂNG NHẬP
+// ==========================================
+const bangDangKy = document.getElementById('signup-overlay');
+const bangDangNhap = document.getElementById('login-overlay');
+const linkDangNhap = document.getElementById('link-login');
+const linkDangKy = document.getElementById('link-signup');
+const nutDongSignUp = document.getElementById('close-signup');
+const nutDongLogin = document.getElementById('close-login');
+const nutSignUp = document.getElementById('btn-signup');
+const nutLogin = document.getElementById('btn-login');
+
+// Hàm chuyển từ bảng đăng ký sang bảng đăng nhập
+function chuyenSangDangNhap(e) {
+    e.preventDefault();
+    if (bangDangKy) bangDangKy.style.display = 'none';
+    if (bangDangNhap) bangDangNhap.style.display = 'flex';
+}
+
+// Hàm chuyển từ bảng đăng nhập sang bảng đăng ký
+function chuyenSangDangKy(e) {
+    e.preventDefault();
+    if (bangDangNhap) bangDangNhap.style.display = 'none';
+    if (bangDangKy) bangDangKy.style.display = 'flex';
+}
+
+// Hàm hoàn tất đăng ký
+function hoanTatDangKy() {
+    const bangDangKy = document.getElementById('signup-overlay');
+    if (bangDangKy) bangDangKy.style.display = 'none';
+
+    // Mở bảng Chọn Mèo
+    const bangChonMeo = document.getElementById('choose-meow-overlay');
+    if (bangChonMeo) {
+        capNhatHinhMeo(); // Load hình mèo lên 2 hộp
+        bangChonMeo.style.display = 'flex';
     }
-});
+}
+
+// Hàm hoàn tất đăng nhập
+function hoanTatDangNhap() {
+    const bangDangNhap = document.getElementById('login-overlay');
+    if (bangDangNhap) bangDangNhap.style.display = 'none';
+
+    // Mở bảng Chọn Mèo
+    const bangChonMeo = document.getElementById('choose-meow-overlay');
+    if (bangChonMeo) {
+        capNhatHinhMeo(); // Load hình mèo lên 2 hộp
+        bangChonMeo.style.display = 'flex';
+    }
+}
+
+// Bấm Sign Up
+if (nutSignUp) nutSignUp.addEventListener('click', hoanTatDangKy);
+
+// Bấm Log In
+if (nutLogin) nutLogin.addEventListener('click', hoanTatDangNhap);
+
+// Bấm "Log in" link ở dưới bảng đăng ký
+if (linkDangNhap) linkDangNhap.addEventListener('click', chuyenSangDangNhap);
+
+// Bấm "Sign up" link ở dưới bảng đăng nhập
+if (linkDangKy) linkDangKy.addEventListener('click', chuyenSangDangKy);
+
+// Bấm nút đóng bảng đăng ký
+if (nutDongSignUp) nutDongSignUp.addEventListener('click', hoanTatDangKy);
+
+// Bấm nút đóng bảng đăng nhập
+if (nutDongLogin) nutDongLogin.addEventListener('click', hoanTatDangNhap);
+
 
 // ==========================================
 // 11. CÀI ĐẶT THỜI GIAN

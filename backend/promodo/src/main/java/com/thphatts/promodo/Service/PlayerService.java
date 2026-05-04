@@ -3,6 +3,7 @@ package com.thphatts.promodo.service;
 import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import com.thphatts.promodo.models.User;
 import com.thphatts.promodo.repository.UserRepository;
@@ -13,17 +14,8 @@ public class PlayerService {
     @Autowired
     private UserRepository userRepository;
 
-    @PostConstruct
-    // khai báo user = 1 để test data
-    public void initData() {
-        if (userRepository.count() == 0) {
-            User testUser = new User();
-            testUser.setCoins(100); // Tặng sẵn 100 xu khởi nghiệp
-            testUser.setPetFullness(50); // Mèo hơi đói
-            userRepository.save(testUser);
-            System.out.println("Đã tạo sẵn User ID=1 với 100 xu!");
-        }
-    }
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     // Lấy thông tin User
     public User getUserInfo(Long id) {

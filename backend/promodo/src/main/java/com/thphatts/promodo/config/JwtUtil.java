@@ -20,6 +20,7 @@ public class JwtUtil {
         return Jwts.builder()
                 .setSubject(userId.toString()) // Lưu ID user vào trong vé
                 .claim("username", username)
+                .claim("userId", userId)
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + EXPIRE_DURATION))
                 .signWith(key)

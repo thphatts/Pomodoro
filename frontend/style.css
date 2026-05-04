@@ -82,7 +82,7 @@ body {
 .nut-cua-hang {
     position: absolute;
     width: calc(100 / 1920 * 100%);
-    left: calc(1597/ 1920 * 100%);
+    left: calc(1597 / 1920 * 100%);
     top: calc(102 / 1080 * 100%);
     cursor: pointer;
 }
@@ -90,23 +90,37 @@ body {
 .vi-tien {
     position: absolute;
     width: calc(100 / 1920 * 100%);
-    left: calc(1490/ 1920 * 100%);
+    left: calc(1490 / 1920 * 100%);
     top: calc(102 / 1080 * 100%);
     cursor: pointer;
 }
 
+.nut-cai-dat {
+    position: absolute !important;
+    width: calc(100 / 1920 * 100%) !important;
+    left: calc(1710 / 1920 * 100%) !important;
+    top: calc(102 / 1080 * 100%) !important;
+    z-index: 20 !important;
+    cursor: pointer !important;
+    image-rendering: pixelated !important;
+    transition: transform 0.2s ease !important;
+}
+
+.nut-cai-dat:hover { transform: scale(1.1) !important; }
+.nut-cai-dat:active { transform: scale(0.95) !important; }
+
 .thanh-thuc-an {
     position: absolute;
-    width: calc(341/ 1920 * 100%);
-    left: calc(190/ 1920 * 100%);
-    top: calc(77/ 1080 * 100%);
+    width: calc(341 / 1920 * 100%);
+    left: calc(190 / 1920 * 100%);
+    top: calc(77 / 1080 * 100%);
 }
 
 .thanh-cam-xuc {
     position: absolute;
-    width: calc(330/ 1920 * 100%);
-    left: calc(201/ 1920 * 100%);
-    top: calc(136/ 1080 * 100%);
+    width: calc(330 / 1920 * 100%);
+    left: calc(201 / 1920 * 100%);
+    top: calc(136 / 1080 * 100%);
 }
 .thanh-thuc-an-wrap {
     width: calc(341 / 1920 * 100%);
@@ -306,14 +320,14 @@ body {
 
 .danh-sach-do-an {
     position: absolute;
-    top: 150px;
-    right: 73px;
-    width: 412px;
+    top: 13.89%;
+    right: 3.8%;
+    width: 43.46%;
+    height: 60%;
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    justify-items: center;
-    row-gap: 15px;
-    column-gap: 25px;
+    grid-template-rows: repeat(2, 1fr);
+    gap: 2%;
     z-index: 1200;
 }
 
@@ -322,20 +336,21 @@ body {
     flex-direction: column;
     align-items: center;
     position: relative;
-    width: 124px;
-    min-height: 178px;
+    width: 100%;
+    height: 100%;
     cursor: pointer;
 }
 
 .shop-item-square {
-    width: 120px;
-    height: 120px;
+    width: 100%;
+    aspect-ratio: 1;
     background-color: #D4B696;
     display: flex;
     justify-content: center;
     align-items: center;
     position: relative;
     transition: transform 0.4s ease;
+    border-radius: 4px;
 }
 
 .shop-item-card:hover .shop-item-square:not(.empty) {
@@ -353,16 +368,17 @@ body {
 
 .shop-item-gia {
     position: relative;
-    margin-top: 7px;
+    margin-top: 0.5rem;
     background: #ffffff;
     border: 2px solid #272727;
     color: #191919;
     font-family: "Pixelify Sans", sans-serif;
-    font-size: 19px;
+    font-size: 1.75vh;
     font-weight: bold;
     line-height: 1;
     padding: 2px 8px;
     z-index: 2;
+    white-space: nowrap;
 }
 
 .shop-item-owned {
@@ -374,23 +390,22 @@ body {
     border: 1px solid #272727;
     color: #202020;
     font-family: "Pixelify Sans", sans-serif;
-    font-size: 14px;
+    font-size: 1.3vh;
     line-height: 1;
     padding: 2px;
     z-index: 3;
 }
 
 .shop-buy-btn {
-    margin-top: 17px;
-    width: 150px;
-    height: 65px;
-    margin-left: 50px;
+    margin-top: 0.3rem;
+    width: 100%;
+    aspect-ratio: 2.8;
     border: 0;
     background: url("asset/nutbuy.PNG") center/100% 100% no-repeat;
     background-color: transparent;
     color: transparent;
     font-family: "Pixelify Sans", sans-serif;
-    font-size: 50px;
+    font-size: 3.7vh;
     line-height: 10;
     text-transform: lowercase;
     cursor: pointer;
@@ -586,13 +601,14 @@ body {
 
 .nut-quay-lai {
     position: absolute !important;
-    top: 40px !important;
-    left: 50px !important;
-    width: 65px !important;
+    top: 3.7vh !important;
+    left: 2.6vw !important;
+    width: 3.39vw !important;
     z-index: 2000 !important;
     cursor: pointer !important;
     pointer-events: auto !important;
-    transition: transform 0.1s ease-out !important; 
+    transition: transform 0.1s ease-out !important;
+    image-rendering: pixelated !important;
 }
 
 .nut-quay-lai:hover { transform: scale(1.2); }
@@ -600,29 +616,14 @@ body {
 
 .bang-ten-shop {
     position: absolute !important;
-    top: -40px !important;    
+    top: -3.7vh !important;    
     left: 55% !important;
     transform: translateX(-50%) !important;
-    width: 260px !important; 
+    width: 13.54vw !important;
     z-index: 1300 !important;
     image-rendering: pixelated !important;
     pointer-events: none !important;
 }
-
-.nut-cai-dat.nut-an { display: none !important; }
-.nut-cai-dat {
-    position: absolute !important;
-    top: 56px !important;    
-    right: 60px !important;  
-    width: 57px !important;
-    z-index: 2000 !important;
-    cursor: pointer !important;
-    image-rendering: pixelated !important;
-    transition: transform 0.2s ease !important;
-}
-
-.nut-cai-dat:hover { transform: scale(1.1) !important; }
-.nut-cai-dat:active { transform: scale(0.95) !important; }
 
 .nut-cua-hang:not(.nut-an), .vi-tien:not(.nut-an), .nut-cai-dat:not(.nut-an) {
     display: block !important;
@@ -637,7 +638,7 @@ body {
 #so-tien {
     position: absolute;
     color: white;
-    font-size: 45px; 
+    font-size: 4.17vh; 
     font-weight: 400;
     font-family: "Pixelify Sans", sans-serif;
     text-rendering: optimizeSpeed;
@@ -750,6 +751,7 @@ body {
 .signup-footer-pixel a {
     color: #3b82f6;
     text-decoration: none;
+    cursor: pointer;
 }
 
 .signup-footer-pixel a:hover {
@@ -757,9 +759,9 @@ body {
 }
 
 /* ==========================================
-   BẢNG ĐĂNG NHẬP (MỚI THÊM)
+   BẢNG ĐĂNG NHẬP
    ========================================== */
-/* #login-overlay {
+#login-overlay {
     position: absolute;
     top: 0;
     left: 0;
@@ -853,11 +855,12 @@ body {
 .login-footer-pixel a {
     color: #3b82f6;
     text-decoration: none;
+    cursor: pointer;
 }
 
 .login-footer-pixel a:hover {
     text-decoration: underline;
-} */
+}
 
 /* ==========================================
    BẢNG CHỌN MÈO (MỚI THÊM)
@@ -1016,5 +1019,11 @@ body {
     opacity: 1;
     z-index: 2;
 }
-.ok-btn img { width: 100%; height: auto; }
-.ok-btn:hover { transform: translateX(-50%) scale(1.04); }
+
+.bang-hien {
+    opacity: 1 !important;
+    margin: 0;
+    padding: 0;
+    line-height: 1;
+    pointer-events: auto !important;
+}

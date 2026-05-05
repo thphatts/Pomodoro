@@ -13,6 +13,7 @@ import com.thphatts.promodo.exception.ResourceNotFoundException;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import java.util.Map;
@@ -20,6 +21,7 @@ import java.util.Map;
 @RestController
 @RequestMapping("/api/auth")
 @CrossOrigin(origins = "*")
+@Tag(name = "Authentication", description = "APIs quản lý Đăng ký và Đăng nhập")
 public class AuthController {
 
     @Autowired
@@ -31,10 +33,10 @@ public class AuthController {
     @Autowired
     private JwtUtil jwtUtil;
 
-    @Operation(summary = "Register a new user", description = "Registers a new user with a unique username and a password. Returns a success message.")
+    @Operation(summary = "Đăng ký tài khoản mới", description = "Tạo user mới trong hệ thống. Mật khẩu sẽ được băm (Bcrypt) trước khi lưu.")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Registration successful"),
-            @ApiResponse(responseCode = "400", description = "Invalid input or username already taken")
+            @ApiResponse(responseCode = "200", description = "Đăng ký thành công"),
+            @ApiResponse(responseCode = "400", description = "Đăng ký thành công")
     })
     @PostMapping("/register")
     public ResponseEntity<Map<String, Object>> register(@Valid @RequestBody RegisterRequest registerRequest) {
@@ -52,20 +54,20 @@ public class AuthController {
         return ResponseEntity.ok(Map.of("status", "success", "message", "Registration successful!"));
     }
 
-    @Operation(summary = "Authenticate user and get JWT token", description = "Authenticates a user with username and password, returning a JWT token upon successful login.")
+    @Operation(summary = "Xác thực người dùng và lấy token", description = "Xác thực username/password. Trả về đối tượng chứa JWT Token.")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Login successful, returns JWT token"),
-            @ApiResponse(responseCode = "401", description = "Invalid username or password")
+            @ApiResponse(responseCode = "200", description = "Đăng nhập thành công, returns JWT token"),
+            @ApiResponse(responseCode = "401", description = "Sai tài khoản hoặc mật khẩu")
     })
     @PostMapping("/login")
     public ResponseEntity<Map<String, Object>> login(@Valid @RequestBody LoginRequest loginRequest) {
         // Tìm user trong DB
         User user = userRepository.findByUsername(loginRequest.getUsername())
-                .orElseThrow(() -> new ResourceNotFoundException("Invalid username or password!"));
+                .orElseThrow(() -> new ResourceNotFoundException("Sai tài khoản hoặc mật khẩu"));
 
         // Kiểm tra user có tồn tại và pass có khớp với mã băm trong DB không
         if (!passwordEncoder.matches(loginRequest.getPassword(), user.getPassword())) {
-            throw new BusinessException("Invalid username or password!");
+            throw new BusinessException("Sai tài khoản hoặc mật khẩu");
         }
 
         // Nếu đúng cấp Token!

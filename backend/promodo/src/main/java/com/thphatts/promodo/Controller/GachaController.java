@@ -23,8 +23,6 @@ import java.util.Map;
 @RequestMapping("/api/gacha")
 @CrossOrigin(origins = "*")
 public class GachaController {
-
-    // Kêu gọi đầy đủ cả 3 anh lính này vào thì mới chạy được
     @Autowired
     private GachaService gachaService;
 

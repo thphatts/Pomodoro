@@ -140,64 +140,62 @@ if (closeSignup) {
         if (signupOverlay) signupOverlay.style.display = 'none';
     });
 }
+if (linkLogin) {
+    linkLogin.addEventListener("click", function(e) {
+        e.preventDefault();
+        if (signupOverlay) signupOverlay.style.display = "none";
+        if (loginOverlay) loginOverlay.style.display = "flex"; // Assuming you have a login overlay
+    });
+}
 
-// Link login (hiện tại chưa implement đầy đủ, có thể mở rộng sau)
-// if (linkLogin) {
-//     linkLogin.addEventListener("click", function(e) {
-//         e.preventDefault();
-//         if (signupOverlay) signupOverlay.style.display = "none";
-//         if (loginOverlay) loginOverlay.style.display = "flex"; // Assuming you have a login overlay
-//     });
-// }
+const loginOverlay = document.getElementById("login-overlay");
+const loginUsernameInput = document.getElementById("login-username-input");
+const loginPasswordInput = document.getElementById("login-password-input");
+const btnLogin = document.getElementById("btn-login");
+const closeLogin = document.getElementById("close-login");
+const linkRegister = document.getElementById("link-signup");
 
-// const loginOverlay = document.getElementById("login-overlay");
-// const loginUsernameInput = document.getElementById("login-username-input");
-// const loginPasswordInput = document.getElementById("login-password-input");
-// const btnLogin = document.getElementById("btn-login");
-// const closeLogin = document.getElementById("close-login");
-// const linkRegister = document.getElementById("link-register");
+if (btnLogin) {
+    btnLogin.addEventListener("click", async function() {
+        const username = loginUsernameInput ? loginUsernameInput.value.trim() : "";
+        const password = loginPasswordInput ? loginPasswordInput.value.trim() : "";
 
-// if (btnLogin) {
-//     btnLogin.addEventListener("click", async function() {
-//         const username = loginUsernameInput ? loginUsernameInput.value.trim() : "";
-//         const password = loginPasswordInput ? loginPasswordInput.value.trim() : "";
+        if (!username || !password) {
+            thongBaoShop("Vui lòng nhập đầy đủ thông tin!", "error");
+            return;
+        }
 
-//         if (!username || !password) {
-//             thongBaoShop("Vui lòng nhập đầy đủ thông tin!", "error");
-//             return;
-//         }
+        const loginResult = await apiRequest(API_BASE_URL + "/auth/login", "POST", { username, password }, false);
 
-//         const loginResult = await apiRequest(API_BASE_URL + "/auth/login", "POST", { username, password }, false);
+        if (loginResult.status === "success" && loginResult.token) {
+            authToken = loginResult.token;
+            currentUser = {
+                id: loginResult.userId,
+                username: loginResult.username
+            };
+            localStorage.setItem("auth_token", authToken);
 
-//         if (loginResult.status === "success" && loginResult.token) {
-//             authToken = loginResult.token;
-//             currentUser = {
-//                 id: loginResult.userId,
-//                 username: loginResult.username
-//             };
-//             localStorage.setItem("auth_token", authToken);
+            if (loginOverlay) loginOverlay.style.display = "none";
+            moBangChonMeo();
+        } else {
+            thongBaoShop(loginResult.message || "Đăng nhập thất bại!", "error");
+        }
+    });
+}
 
-//             if (loginOverlay) loginOverlay.style.display = "none";
-//             moBangChonMeo();
-//         } else {
-//             thongBaoShop(loginResult.message || "Đăng nhập thất bại!", "error");
-//         }
-//     });
-// }
+if (closeLogin) {
+    closeLogin.addEventListener("click", function() {
+        if (loginOverlay) loginOverlay.style.display = "none";
+    });
+}
 
-// if (closeLogin) {
-//     closeLogin.addEventListener("click", function() {
-//         if (loginOverlay) loginOverlay.style.display = "none";
-//     });
-// }
-
-// if (linkRegister) {
-//     linkRegister.addEventListener("click", function(e) {
-//         e.preventDefault();
-//         if (loginOverlay) loginOverlay.style.display = "none";
-//         if (signupOverlay) signupOverlay.style.display = "flex";
-//     });
-// }
+if (linkRegister) {
+    linkRegister.addEventListener("click", function(e) {
+        e.preventDefault();
+        if (loginOverlay) loginOverlay.style.display = "none";
+        if (signupOverlay) signupOverlay.style.display = "flex";
+    });
+}
 
 
 // ==========================================
@@ -739,78 +737,6 @@ if (nutMuiTenBack) {
         dongShop();
     });
 }
-
-// ==========================================
-// 8.1 LOGIC ĐĂNG KÝ VÀ ĐĂNG NHẬP
-// ==========================================
-const bangDangKy = document.getElementById('signup-overlay');
-const bangDangNhap = document.getElementById('login-overlay');
-const linkDangNhap = document.getElementById('link-login');
-const linkDangKy = document.getElementById('link-signup');
-const nutDongSignUp = document.getElementById('close-signup');
-const nutDongLogin = document.getElementById('close-login');
-const nutSignUp = document.getElementById('btn-signup');
-const nutLogin = document.getElementById('btn-login');
-
-// Hàm chuyển từ bảng đăng ký sang bảng đăng nhập
-function chuyenSangDangNhap(e) {
-    e.preventDefault();
-    if (bangDangKy) bangDangKy.style.display = 'none';
-    if (bangDangNhap) bangDangNhap.style.display = 'flex';
-}
-
-// Hàm chuyển từ bảng đăng nhập sang bảng đăng ký
-function chuyenSangDangKy(e) {
-    e.preventDefault();
-    if (bangDangNhap) bangDangNhap.style.display = 'none';
-    if (bangDangKy) bangDangKy.style.display = 'flex';
-}
-
-// Hàm hoàn tất đăng ký
-function hoanTatDangKy() {
-    const bangDangKy = document.getElementById('signup-overlay');
-    if (bangDangKy) bangDangKy.style.display = 'none';
-
-    // Mở bảng Chọn Mèo
-    const bangChonMeo = document.getElementById('choose-meow-overlay');
-    if (bangChonMeo) {
-        capNhatHinhMeo(); // Load hình mèo lên 2 hộp
-        bangChonMeo.style.display = 'flex';
-    }
-}
-
-// Hàm hoàn tất đăng nhập
-function hoanTatDangNhap() {
-    const bangDangNhap = document.getElementById('login-overlay');
-    if (bangDangNhap) bangDangNhap.style.display = 'none';
-
-    // Mở bảng Chọn Mèo
-    const bangChonMeo = document.getElementById('choose-meow-overlay');
-    if (bangChonMeo) {
-        capNhatHinhMeo(); // Load hình mèo lên 2 hộp
-        bangChonMeo.style.display = 'flex';
-    }
-}
-
-// Bấm Sign Up
-if (nutSignUp) nutSignUp.addEventListener('click', hoanTatDangKy);
-
-// Bấm Log In
-if (nutLogin) nutLogin.addEventListener('click', hoanTatDangNhap);
-
-// Bấm "Log in" link ở dưới bảng đăng ký
-if (linkDangNhap) linkDangNhap.addEventListener('click', chuyenSangDangNhap);
-
-// Bấm "Sign up" link ở dưới bảng đăng nhập
-if (linkDangKy) linkDangKy.addEventListener('click', chuyenSangDangKy);
-
-// Bấm nút đóng bảng đăng ký
-if (nutDongSignUp) nutDongSignUp.addEventListener('click', hoanTatDangKy);
-
-// Bấm nút đóng bảng đăng nhập
-if (nutDongLogin) nutDongLogin.addEventListener('click', hoanTatDangNhap);
-
-
 // ==========================================
 // 11. CÀI ĐẶT THỜI GIAN
 // ==========================================

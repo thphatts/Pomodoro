@@ -10,6 +10,11 @@ import com.thphatts.promodo.repository.StudySessionRepository;
 import com.thphatts.promodo.repository.UserRepository;
 import com.thphatts.promodo.service.PlayerService;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+
 import java.security.Principal; // Nhớ dòng import cực kỳ quan trọng này
 import java.util.Map;
 
@@ -34,6 +39,11 @@ public class PlayerController {
 
     // api lấy thông tin lúc load web
     @GetMapping("/status")
+    @Operation(summary = "Lấy thông tin người chơi", description = "Trả về số dư ví tiền (coins), độ no (petFullness) và độ vui vẻ (petHappiness) của mèo.")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Thành công"),
+            @ApiResponse(responseCode = "401", description = "Chưa đăng nhập (Thiếu JWT)", content = @Content)
+    })
     public ResponseEntity<User> getStatus(Principal principal) {
         Long userId = getCurrentUserId(principal);
         User user = playerService.getUserInfo(userId);
@@ -42,6 +52,7 @@ public class PlayerController {
 
     // api học xong nhận xu
     @PostMapping("/reward")
+    @Operation(summary = "Nhận thưởng sau Pomodoro", description = "Cộng tiền và tăng độ vui vẻ dựa trên số phút học.")
     public ResponseEntity<User> getReward(@RequestParam int minutes, Principal principal) {
         Long userId = getCurrentUserId(principal);
         User updatedUser = playerService.addReward(userId, minutes);
@@ -71,6 +82,11 @@ public class PlayerController {
 
     // api mua đồ
     @PostMapping("/player/buy")
+    @Operation(summary = "Mua thức ăn cho mèo", description = "Trừ tiền trong ví và tăng độ no cho mèo. Check đủ tiền trước khi xử lý.")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Mua thành công"),
+            @ApiResponse(responseCode = "400", description = "Không đủ xu để mua", content = @Content)
+    })
     public Map<String, Object> buyItem(@RequestParam int price, @RequestParam int nutrition, Principal principal) {
         Long userId = getCurrentUserId(principal); // Lấy ID chuẩn từ vé
         User user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("Không tìm thấy User"));

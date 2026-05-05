@@ -1,20 +1,25 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <title>Mèo Pomodoro</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400..700&display=swap" rel="stylesheet"> 
+    <link href="https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400..700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
     <div class="khung-game">
         <img src="asset/anhnenthat.png" alt="Nền phòng" class="anh-nen">
-        
+        <!-- Thêm điện thoại trên bàn -->
+        <img src="asset/phong_hoc/Dien_thoai_chua_nhac.png" alt="Điện thoại" id="dien-thoai-ban" class="dien-thoai-chua-nhac">
+        <img src="asset/phong_hoc/Dien_thoai_da_nhac.png" alt="Điện thoại nhấc máy" id="dien-thoai-nhac"
+            class="dien-thoai-da-nhac nut-an">
+
         <img src="asset/backgroundmeoan.gif" alt="Nền mèo ăn" class="bg-meo-an" id="bg-meo-an">
 
-        <div class="lop-phu-toi" id="man-hoi-toi"></div>
 
         <div id="man-hinh-bat-dau" class="man-hinh-hien">
             <div id="cum-waboume-chinh-giua">
@@ -26,19 +31,19 @@
         <div id="man-hinh-game-chinh" class="man-hinh-an">
             <img src="asset/nutstart.png" alt="START" class="nut-start nut-an" id="nut-bat-dau">
         </div>
-            
+
         <img src="asset/nutstop.png" alt="STOP" class="nut-stop nut-an" id="nut-stop">
         <img src="asset/nutpause.png" alt="PAUSE" class="nut-pause nut-an" id="nut-pause">
-        <img src="asset/nutshop.png" alt="Cửa hàng" class="nut-cua-hang nut-an" id="mo-shop">   
+        <img src="asset/nutshop.png" alt="Cửa hàng" class="nut-cua-hang nut-an" id="mo-shop">
         <img src="asset/nutcaidat.png" alt="Cài đặt" class="nut-cai-dat nut-an" id="nut-cai-dat">
-        
+
         <div class="thanh-wrap thanh-thuc-an-wrap">
             <img src="asset/thanhthucan.png" alt="Thanh Thức ăn" class="thanh-frame">
             <div class="thanh-loi" id="bar-thuc-an">
                 <img src="asset/Mức thức ăn.png" alt="Mức" class="thanh-muc">
             </div>
         </div>
-        
+
         <div class="thanh-wrap thanh-cam-xuc-wrap">
             <img src="asset/thanhcamxuc.png" alt="Thanh cảm xúc" class="thanh-frame">
             <div class="thanh-loi" id="bar-cam-xuc">
@@ -49,9 +54,9 @@
 
         <div class="cum-meo-game" id="cum-meo">
             <img src="asset/meongu.gif" alt="Chú mèo" class="chu-meo" id="meo-chinh">
-           <img src="asset/meoan.gif" alt="Mèo ăn" class="chu-meo-an" id="meo-an">
-           <img src="asset/meoxaman.gif" alt="Mèo xám ăn" class="meo-xam-an" id="meo-xam-an">
-          
+            <img src="asset/meoan.gif" alt="Mèo ăn" class="chu-meo-an" id="meo-an">
+            <img src="asset/meoxaman.gif" alt="Mèo xám ăn" class="meo-xam-an" id="meo-xam-an">
+
             <div id="cum-dem-gio" class="bang-an">
                 <img src="asset/bangdemgio.png" alt="Bảng" class="anh-nen-bang">
                 <span id="so-giay">00:00</span>
@@ -79,7 +84,8 @@
         <div id="time-popup-overlay" class="overlay" style="display: none;">
             <div class="pixel-popup">
                 <img src="asset/bangchinhthoigian.png" alt="Bảng chỉnh thời gian" class="popup-bg">
-                <div class="close-icon" id="close-popup" aria-label="Đóng bảng"><img src="asset/dauX.svg" alt="X" width="100%"></div>
+                <div class="close-icon" id="close-popup" aria-label="Đóng bảng"><img src="asset/dauX.svg" alt="X"
+                        width="100%"></div>
 
                 <div class="time-display-box">
                     <span id="current-time-val">25:00</span>
@@ -103,10 +109,11 @@
         <div id="signup-overlay" style="display: none;">
             <div class="pixel-popup-signup">
                 <img src="asset/bangdangky.png" alt="Bảng đăng ký" class="signup-bg">
-                
+
                 <button class="close-signup-btn" id="close-signup" aria-label="Đóng"></button>
 
-                <input type="text" id="username-input" class="signup-input username-pos" autocomplete="off" placeholder="Username">
+                <input type="text" id="username-input" class="signup-input username-pos" autocomplete="off"
+                    placeholder="Username">
                 <input type="password" id="password-input" class="signup-input password-pos" placeholder="Password">
 
                 <button class="btn-signup-pixel" id="btn-signup">sign up</button>
@@ -120,11 +127,13 @@
         <div id="login-overlay" style="display: none;">
             <div class="pixel-popup-login">
                 <img src="asset/bangdangnhap.PNG" alt="Bảng đăng nhập" class="login-bg">
-                
+
                 <button class="close-login-btn" id="close-login" aria-label="Đóng"></button>
 
-                <input type="text" id="login-username-input" class="login-input login-username-pos" autocomplete="off" placeholder="Username">
-                <input type="password" id="login-password-input" class="login-input login-password-pos" placeholder="Password">
+                <input type="text" id="login-username-input" class="login-input login-username-pos" autocomplete="off"
+                    placeholder="Username">
+                <input type="password" id="login-password-input" class="login-input login-password-pos"
+                    placeholder="Password">
 
                 <button class="btn-login-pixel" id="btn-login">log in</button>
 
@@ -137,7 +146,7 @@
         <div id="choose-meow-overlay" style="display: none;">
             <div class="pixel-popup-choose">
                 <img src="asset/bangchonmeo.png" alt="Bảng chọn mèo" class="choose-bg">
-                
+
                 <button class="arrow-btn-meow arrow-left" id="prev-meow">&lt;</button>
                 <button class="arrow-btn-meow arrow-right" id="next-meow">&gt;</button>
 
@@ -154,8 +163,27 @@
             </div>
         </div>
 
+        <!-- Bảng Tạo Phòng (Room meow) -->
+        <div id="room-overlay" class="overlay" style="display: none;">
+            <div class="pixel-popup-room">
+                <img src="asset/phong_hoc/Tao-phong-hoc.png" alt="Bảng tạo phòng" class="room-bg">
+                
+                <!-- Nút đóng (X) -->
+                <button class="close-room-btn" id="close-room" aria-label="Đóng"></button>
+
+                <!-- Các input và button đè lên ảnh nền -->
+                <input type="text" id="room-user-name" class="room-input name-pos" placeholder="">
+                <input type="text" id="room-id-input" class="room-input id-pos" placeholder="">
+                
+                <button class="btn-join-room" id="btn-join-room">Join</button>
+                
+                <img src="asset/phong_hoc/New-room-button.png" alt="New room" class="btn-new-room" id="btn-new-room">
+            </div>
+        </div>
+
     </div>
 
-    <script src="script.js"></script>
+    <script type="module" src="js/app.js"></script>
 </body>
+
 </html>

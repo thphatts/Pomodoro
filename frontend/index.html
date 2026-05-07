@@ -14,7 +14,8 @@
     <div class="khung-game">
         <img src="asset/anhnenthat.png" alt="Nền phòng" class="anh-nen">
         <!-- Thêm điện thoại trên bàn -->
-        <img src="asset/phong_hoc/Dien_thoai_chua_nhac.png" alt="Điện thoại" id="dien-thoai-ban" class="dien-thoai-chua-nhac">
+        <img src="asset/phong_hoc/Dien_thoai_chua_nhac.png" alt="Điện thoại" id="dien-thoai-ban"
+            class="dien-thoai-chua-nhac">
         <img src="asset/phong_hoc/Dien_thoai_da_nhac.png" alt="Điện thoại nhấc máy" id="dien-thoai-nhac"
             class="dien-thoai-da-nhac nut-an">
 
@@ -167,17 +168,77 @@
         <div id="room-overlay" class="overlay" style="display: none;">
             <div class="pixel-popup-room">
                 <img src="asset/phong_hoc/Tao-phong-hoc.png" alt="Bảng tạo phòng" class="room-bg">
-                
+
                 <!-- Nút đóng (X) -->
                 <button class="close-room-btn" id="close-room" aria-label="Đóng"></button>
 
                 <!-- Các input và button đè lên ảnh nền -->
                 <input type="text" id="room-user-name" class="room-input name-pos" placeholder="">
                 <input type="text" id="room-id-input" class="room-input id-pos" placeholder="">
-                
+
                 <button class="btn-join-room" id="btn-join-room">Join</button>
-                
                 <img src="asset/phong_hoc/New-room-button.png" alt="New room" class="btn-new-room" id="btn-new-room">
+            </div>
+        </div>
+
+        <!-- Giao diện Phòng học (Classroom) -->
+        <div id="classroom-overlay" class="overlay" style="display: none;">
+            <div class="classroom-popup">
+                <img src="asset/phong_hoc/New room/Classroom-interface.png" alt="Phòng học" class="classroom-bg">
+
+                <!-- Timer và Nút điều khiển -->
+                <div class="classroom-timer-container">
+                    <span id="classroom-timer">00:00</span>
+                    <img src="asset/phong_hoc/New room/Start-btn.png" alt="Start" id="classroom-start-btn"
+                        class="classroom-btn">
+                    <div id="classroom-controls" class="nut-an">
+                        <img src="asset/phong_hoc/New room/Pause-btn.png" alt="Pause" id="classroom-pause-btn"
+                            class="classroom-control-btn">
+                        <img src="asset/phong_hoc/New room/Stop-btn.png" alt="Stop" id="classroom-stop-btn"
+                            class="classroom-control-btn">
+                    </div>
+                </div>
+
+                <!-- Grid người dùng -->
+                <div class="classroom-users-grid">
+                    <div class="user-box"><img src="asset/phong_hoc/New room/User-1.png" alt="Linh"></div>
+                    <div class="user-box"><img src="asset/phong_hoc/New room/User-2.png" alt="Quang"></div>
+                    <div class="user-box"><img src="asset/phong_hoc/New room/User-3.png" alt="Phat"></div>
+
+                </div>
+
+                <!-- Main View -->
+                <div class="classroom-main-view" id="main-view-container">
+                    <img src="asset/phong_hoc/New room/Classroom-avatar.png" alt="Main View" class="main-view-bg">
+                    <img src="asset/phong_hoc/New room/Avatar-extension.png" alt="Expand" class="avatar-extension"
+                        id="btn-expand-view">
+                    <img src="asset/phong_hoc/New room/Meo-xam.gif" class="classroom-cat cat-xam" alt="Mèo xám">
+                    <img src="asset/phong_hoc/New room/Meo-vang.gif" class="classroom-cat cat-vang" alt="Mèo vàng">
+
+                    <!-- Đồng hồ nhỏ trong phòng thú cưng -->
+                    <div class="pet-room-clock-container">
+                        <img src="asset/phong_hoc/New room/Đồng hồ đếm ngược.png" alt="Clock" class="pet-room-clock">
+                        <span id="pet-room-timer-txt">25:00</span>
+                    </div>
+                </div>
+
+                <!-- Chat Area -->
+                <div class="classroom-chat-area">
+                    <input type="text" placeholder="type a mess" id="classroom-chat-input">
+                </div>
+
+                <!-- Bottom Controls -->
+                <div class="classroom-bottom-controls">
+                    <div class="room-id-display">ID : 6868686</div>
+                    <div class="control-icons">
+                        <img src="asset/phong_hoc/New room/microphone.png" alt="Mic">
+                        <img src="asset/phong_hoc/New room/Camera-on.png" alt="Cam">
+                        <img src="asset/phong_hoc/New room/Rise-up.png" alt="Hand">
+                        <img src="asset/phong_hoc/New room/Hang-up.png" alt="Hang up" id="hang-up-btn"
+                            class="hang-up-btn">
+                        <img src="asset/phong_hoc/New room/Emotion-bar.png" alt="Emotion">
+                    </div>
+                </div>
             </div>
         </div>
 

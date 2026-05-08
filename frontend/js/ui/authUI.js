@@ -26,7 +26,7 @@ export function initAuthUI() {
         nutReady.addEventListener('click', function() {
             if (manHinhBatDau) manHinhBatDau.classList.replace('man-hinh-hien', 'man-hinh-an');
             if (manHinhGameChinh) manHinhGameChinh.classList.replace('man-hinh-an', 'man-hinh-hien');
-            if (signupOverlay) signupOverlay.style.display = 'flex';
+            if (loginOverlay) loginOverlay.style.display = 'flex';
         });
     }
 

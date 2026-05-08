@@ -43,20 +43,20 @@ async function apiRequest(url, method = 'GET', body = null, requireAuth = true) 
     const headers = {
         'Content-Type': 'application/json'
     };
-    
+
     if (requireAuth && authToken) {
         headers['Authorization'] = 'Bearer ' + authToken;
     }
-    
+
     const options = {
         method,
         headers
     };
-    
+
     if (body && method !== 'GET') {
         options.body = JSON.stringify(body);
     }
-    
+
     try {
         const response = await fetch(url, options);
         const data = await response.json();
@@ -82,43 +82,43 @@ const linkLogin = document.getElementById('link-login');
 
 // Bấm Ready -> Hiện bảng đăng ký
 if (nutReady) {
-    nutReady.addEventListener('click', function() {
+    nutReady.addEventListener('click', function () {
         if (manHinhBatDau) manHinhBatDau.classList.replace('man-hinh-hien', 'man-hinh-an');
         if (manHinhGameChinh) manHinhGameChinh.classList.replace('man-hinh-an', 'man-hinh-hien');
-        if (signupOverlay) signupOverlay.style.display = 'flex';
+        if (loginOverlay) loginOverlay.style.display = 'flex';
     });
 }
 
 // Xử lý đăng ký
 if (btnSignup) {
-    btnSignup.addEventListener('click', async function() {
+    btnSignup.addEventListener('click', async function () {
         const username = usernameInput ? usernameInput.value.trim() : '';
         const password = passwordInput ? passwordInput.value.trim() : '';
-        
+
         if (!username || !password) {
             thongBaoShop('Vui lòng nhập đầy đủ thông tin!', 'error');
             return;
         }
-        
+
         // Bước 1: Đăng ký tài khoản
         const registerResult = await apiRequest(API_BASE_URL + '/auth/register', 'POST', { username, password }, false);
-        
+
         if (registerResult.status === 'success') {
             thongBaoShop('Đăng ký thành công! Đang đăng nhập...', 'ok');
-            
+
             // Bước 2: Tự động đăng nhập sau khi đăng ký thành công
             const loginResult = await apiRequest(API_BASE_URL + '/auth/login', 'POST', { username, password }, false);
-            
+
             if (loginResult.status === 'success' && loginResult.token) {
                 authToken = loginResult.token;
                 currentUser = {
                     id: loginResult.userId,
                     username: loginResult.username
                 };
-                
+
                 // Lưu token vào localStorage
                 localStorage.setItem('auth_token', authToken);
-                
+
                 // Chuyển sang bảng chọn mèo
                 if (signupOverlay) signupOverlay.style.display = 'none';
                 moBangChonMeo();
@@ -136,7 +136,7 @@ if (btnSignup) {
 
 // Đóng bảng đăng ký
 if (closeSignup) {
-    closeSignup.addEventListener('click', function() {
+    closeSignup.addEventListener('click', function () {
         if (signupOverlay) signupOverlay.style.display = 'none';
     });
 }
@@ -147,7 +147,7 @@ const loginPasswordInput = document.getElementById("login-password-input");
 const btnLogin = document.getElementById("btn-login");
 
 if (btnLogin) {
-    btnLogin.addEventListener("click", async function() {
+    btnLogin.addEventListener("click", async function () {
         const username = loginUsernameInput ? loginUsernameInput.value.trim() : "";
         const password = loginPasswordInput ? loginPasswordInput.value.trim() : "";
 
@@ -228,22 +228,22 @@ if (btnPrevMeow) {
 }
 
 if (btnChooseCat) {
-    btnChooseCat.addEventListener('click', function() {
+    btnChooseCat.addEventListener('click', function () {
         if (popupChoose) popupChoose.style.display = 'none';
-        
+
         const meoDuocChon = danhSachMeo[chiSoMeoHienTai];
         skinMeoNgu = meoDuocChon.hinhNgu;
         skinMeoDung = meoDuocChon.hinhDung;
         skinMeoAn = meoDuocChon.hinhAn;
-        
+
         if (hinhMeo) hinhMeo.src = skinMeoNgu;
-        
+
         if (nutStart) {
             nutStart.classList.remove('nut-an');
             setTimeout(() => nutStart.classList.add('nut-start-hien'), 10);
         }
         hienUIChinh();
-        
+
         // Load thông tin user từ server
         loadUserInfo();
     });
@@ -254,7 +254,7 @@ if (btnChooseCat) {
 // ==========================================
 async function loadUserInfo() {
     if (!authToken) return;
-    
+
     const data = await apiRequest(API_BASE_URL + '/status', 'GET', null, true);
     if (data && data.coins !== undefined) {
         viTien = data.coins;
@@ -277,7 +277,7 @@ function capNhatThanhNangLuong() {
 // ==========================================
 function batDauDemNguoc() {
     clearInterval(boDem);
-    boDem = setInterval(function() {
+    boDem = setInterval(function () {
         if (giay === 0) {
             if (phut === 0) {
                 clearInterval(boDem);
@@ -291,7 +291,7 @@ function batDauDemNguoc() {
             giay--;
         }
         hienThi.innerText = dinhDangThoiGian(phut, giay);
-        
+
         // Cập nhật thanh năng lượng
         let tongGiayHienTai = phut * 60 + giay;
         let tongGiayBanDau = macDinhPhut * 60;
@@ -317,17 +317,17 @@ async function xuLyHoanThanhPomodoro() {
     if (bangDone) {
         bangDone.classList.remove('nut-an');
     }
-    
+
     // Gọi API lưu phiên học và nhận thưởng
     const minutes = macDinhPhut;
     const data = await apiRequest(API_BASE_URL + '/session/save', 'POST', { minutes: minutes }, true);
-    
+
     if (data && data.status === 'success') {
         viTien = data.totalCoins;
         petHappiness = data.petHappiness || petHappiness;
         capNhatTienUI();
         capNhatThanhNangLuong();
-        
+
         const tienThuong = data.coinsEarned;
         thongBaoShop(`+${tienThuong} xu! 🎉`, 'ok');
     } else {
@@ -337,7 +337,7 @@ async function xuLyHoanThanhPomodoro() {
         capNhatTienUI();
         thongBaoShop(`+${tienThuong} xu! 🎉`, 'ok');
     }
-    
+
     // Ẩn hiệu ứng sau 4 giây
     setTimeout(() => {
         datLaiGiaoDien();
@@ -350,36 +350,36 @@ async function xuLyHoanThanhPomodoro() {
 // 7. ĐIỀU KHIỂN NÚT START/STOP/PAUSE
 // ==========================================
 if (nutStart) {
-    nutStart.addEventListener('click', function() {
+    nutStart.addEventListener('click', function () {
         this.classList.add('nut-an');
         this.classList.remove('nut-start-hien');
-        
+
         if (nutStop) nutStop.classList.remove('nut-an');
         if (nutPause) {
             nutPause.classList.remove('nut-an');
             nutPause.style.opacity = "1";
         }
-        
+
         if (hinhMeo) hinhMeo.src = skinMeoDung;
-        
+
         if (bang) {
             bang.classList.remove('bang-an');
             bang.classList.add('bang-hien');
         }
-        
+
         const bangTien = document.getElementById('bang-tien');
         if (bangTien) bangTien.classList.add('nut-an');
-        
+
         const manHinhShop = document.getElementById('man-hinh-shop');
         if (manHinhShop) {
             manHinhShop.classList.remove('shop-hien');
             manHinhShop.classList.add('shop-an');
         }
-        
+
         if (nutShop) nutShop.style.pointerEvents = "none";
         if (nutViTop) nutViTop.style.pointerEvents = "none";
         if (nutCaiDat) nutCaiDat.style.pointerEvents = "none";
-        
+
         phut = thoiGianDatTruoc;
         giay = 0;
         dangTamDung = false;
@@ -390,12 +390,12 @@ if (nutStart) {
 }
 
 if (nutStop) {
-    nutStop.addEventListener('click', function() {
+    nutStop.addEventListener('click', function () {
         clearInterval(boDem);
         dangDemGio = false;
         hienThi.innerText = dinhDangThoiGian(thoiGianDatTruoc);
         datLaiGiaoDien();
-        
+
         // Reset thanh năng lượng
         let barThucAn = document.getElementById('bar-thuc-an');
         let barCamXuc = document.getElementById('bar-cam-xuc');
@@ -405,7 +405,7 @@ if (nutStop) {
 }
 
 if (nutPause) {
-    nutPause.addEventListener('click', function() {
+    nutPause.addEventListener('click', function () {
         if (dangTamDung === false) {
             clearInterval(boDem);
             dangTamDung = true;
@@ -432,16 +432,16 @@ function datLaiGiaoDien() {
     }
     if (nutStop) nutStop.classList.add('nut-an');
     if (nutPause) nutPause.classList.add('nut-an');
-    
+
     if (bang) {
         bang.classList.add('bang-an');
         bang.classList.remove('bang-hien');
     }
     if (hinhMeo) hinhMeo.src = skinMeoNgu;
-    
+
     if (nutShop) nutShop.style.pointerEvents = "auto";
     if (nutViTop) nutViTop.style.pointerEvents = "auto";
-    
+
     if (nutCaiDat) {
         nutCaiDat.style.setProperty('visibility', 'visible', 'important');
         nutCaiDat.style.setProperty('opacity', '1', 'important');
@@ -467,10 +467,10 @@ const nutVi = document.getElementById('mo-vi');
 const bangTien = document.getElementById('bang-tien');
 
 if (nutVi && bangTien) {
-    nutVi.addEventListener('click', function(e) {
+    nutVi.addEventListener('click', function (e) {
         e.stopPropagation();
         if (dangDemGio) return;
-        
+
         if (bangTien.classList.contains('nut-an')) {
             bangTien.classList.remove('nut-an');
             bangTien.classList.add('hieu-ung-bop');
@@ -481,7 +481,7 @@ if (nutVi && bangTien) {
     });
 }
 
-document.addEventListener('click', function(event) {
+document.addEventListener('click', function (event) {
     if (bangTien && !bangTien.classList.contains('nut-an')) {
         if (!bangTien.contains(event.target) && !nutVi.contains(event.target)) {
             bangTien.classList.add('nut-an');
@@ -532,12 +532,12 @@ function thongBaoShop(noiDung, loai = 'ok') {
         box.style.opacity = '0';
         document.body.appendChild(box);
     }
-    
+
     box.style.backgroundColor = loai === 'ok' ? '#55A881' : '#d35f5f';
     box.style.color = '#fff';
     box.innerText = noiDung;
     box.style.opacity = '1';
-    
+
     clearTimeout(box._shopTimer);
     box._shopTimer = setTimeout(() => {
         box.style.opacity = '0';
@@ -547,7 +547,7 @@ function thongBaoShop(noiDung, loai = 'ok') {
 function renderShop() {
     if (!danhSachDoAnEl) return;
     danhSachDoAnEl.innerHTML = '';
-    
+
     sanPhamShop.forEach((sp) => {
         const daMua = Number(khoDoAn[sp.id] || 0);
         const card = document.createElement('div');
@@ -562,7 +562,7 @@ function renderShop() {
         `;
         danhSachDoAnEl.appendChild(card);
     });
-    
+
     for (let i = 0; i < 3; i++) {
         const emptyCard = document.createElement('div');
         emptyCard.className = 'shop-item-card';
@@ -575,12 +575,12 @@ function renderShop() {
 async function xuLyMuaHang(productId) {
     const sp = sanPhamShop.find((item) => item.id === productId);
     if (!sp) return;
-    
+
     if (viTien < sp.gia) {
         thongBaoShop('Không đủ tiền!', 'error');
         return;
     }
-    
+
     // Nếu có token thì gọi API backend, ngược lại chơi offline
     if (authToken) {
         // Gọi API backend để mua hàng
@@ -590,20 +590,20 @@ async function xuLyMuaHang(productId) {
             null,
             true
         );
-        
+
         if (data && data.status === 'success') {
             viTien = data.coins;
             petFullness = data.petFullness || petFullness;
             petHappiness = data.petHappiness || petHappiness;
-            
+
             khoDoAn[sp.id] = (khoDoAn[sp.id] || 0) + 1;
             localStorage.setItem(SHOP_STORAGE_KEY, JSON.stringify(khoDoAn));
-            
+
             capNhatTienUI();
             capNhatThanhNangLuong();
             renderShop();
             thongBaoShop(`Đã mua ${sp.ten}!`, 'ok');
-            
+
             // Hiệu ứng mèo ăn
             hienThiMeoAn();
         } else if (data && data.status === 'error') {
@@ -623,14 +623,14 @@ function xuLyMuaHangOffline(sp) {
     viTien -= sp.gia;
     petFullness = Math.min(petFullness + sp.nutrition, 100);
     khoDoAn[sp.id] = (khoDoAn[sp.id] || 0) + 1;
-    
+
     localStorage.setItem(SHOP_STORAGE_KEY, JSON.stringify(khoDoAn));
-    
+
     capNhatTienUI();
     capNhatThanhNangLuong();
     renderShop();
     thongBaoShop(`Đã mua ${sp.ten}!`, 'ok');
-    
+
     // Hiệu ứng mèo ăn
     hienThiMeoAn();
 }
@@ -639,16 +639,16 @@ function hienThiMeoAn() {
     const meoAn = document.getElementById('meo-an');
     const meoXamAn = document.getElementById('meo-xam-an');
     const meoChinh = document.getElementById('meo-chinh');
-    
+
     if (meoChinh) {
         meoChinh.style.opacity = '0';
-        
+
         if (skinMeoAn === 'asset/meoan.GIF' && meoAn) {
             meoAn.classList.add('dang-an');
         } else if (skinMeoAn === 'asset/meoxamoan.GIF' && meoXamAn) {
             meoXamAn.classList.add('dang-an');
         }
-        
+
         setTimeout(() => {
             if (meoAn) meoAn.classList.remove('dang-an');
             if (meoXamAn) meoXamAn.classList.remove('dang-an');
@@ -660,46 +660,46 @@ function hienThiMeoAn() {
 
 function moShop() {
     if (dangDemGio || !manHinhShop) return;
-    
+
     if (khungGame) khungGame.classList.add('shop-dang-mo');
     if (cumMeo) cumMeo.classList.add('meo-sang-trai');
     if (bgMeoAn) bgMeoAn.classList.add('bg-meo-an-hien');
-    
+
     if (nutCaiDat) {
         nutCaiDat.style.setProperty('visibility', 'hidden', 'important');
         nutCaiDat.style.setProperty('opacity', '0', 'important');
         nutCaiDat.style.pointerEvents = 'none';
     }
-    
+
     if (nutStart) {
         nutStart.style.setProperty('visibility', 'hidden', 'important');
         nutStart.style.setProperty('opacity', '0', 'important');
         nutStart.style.pointerEvents = 'none';
     }
-    
+
     manHinhShop.classList.remove('shop-an');
     manHinhShop.classList.add('shop-hien');
 }
 
 function dongShop() {
     if (!manHinhShop) return;
-    
+
     if (khungGame) khungGame.classList.remove('shop-dang-mo');
     if (cumMeo) cumMeo.classList.remove('meo-sang-trai');
     if (bgMeoAn) bgMeoAn.classList.remove('bg-meo-an-hien');
-    
+
     if (nutCaiDat) {
         nutCaiDat.style.setProperty('visibility', 'visible', 'important');
         nutCaiDat.style.setProperty('opacity', '1', 'important');
         nutCaiDat.style.pointerEvents = 'auto';
     }
-    
+
     if (nutStart) {
         nutStart.style.setProperty('visibility', 'visible', 'important');
         nutStart.style.setProperty('opacity', '1', 'important');
         nutStart.style.pointerEvents = 'auto';
     }
-    
+
     manHinhShop.classList.remove('shop-hien');
     manHinhShop.classList.add('shop-an');
 }
@@ -708,7 +708,7 @@ if (nutShop) nutShop.addEventListener('click', moShop);
 
 const nutMuiTenBack = document.getElementById('dong-shop');
 if (nutMuiTenBack) {
-    nutMuiTenBack.addEventListener('click', function(e) {
+    nutMuiTenBack.addEventListener('click', function (e) {
         e.preventDefault();
         e.stopPropagation();
         dongShop();
@@ -763,14 +763,14 @@ if (linkDangKy) linkDangKy.addEventListener('click', chuyenSangDangKy);
 
 // Bấm nút đóng bảng đăng ký
 if (nutDongSignUp) {
-    nutDongSignUp.addEventListener('click', function() {
+    nutDongSignUp.addEventListener('click', function () {
         if (bangDangKy) bangDangKy.style.display = 'none';
     });
 }
 
 // Bấm nút đóng bảng đăng nhập
 if (nutDongLogin) {
-    nutDongLogin.addEventListener('click', function() {
+    nutDongLogin.addEventListener('click', function () {
         if (bangDangNhap) bangDangNhap.style.display = 'none';
     });
 }
@@ -812,13 +812,13 @@ if (okConfirm) {
         clearInterval(boDem);
         dangTamDung = false;
         datLaiGiaoDien();
-        
+
         phut = macDinhPhut;
         giay = 0;
         let m = phut < 10 ? '0' + phut : phut;
         hienThi.innerText = m + ':00';
         timePopupOverlay.style.display = 'none';
-        
+
         let barThucAn = document.getElementById('bar-thuc-an');
         let barCamXuc = document.getElementById('bar-cam-xuc');
         if (barThucAn) barThucAn.style.width = '100%';
@@ -852,18 +852,18 @@ function khoiTaoUngDung() {
     } catch (e) {
         khoDoAn = {};
     }
-    
+
     // Kiểm tra token từ localStorage (nếu có)
     const savedToken = localStorage.getItem('auth_token');
     if (savedToken) {
         authToken = savedToken;
         loadUserInfo();
     }
-    
+
     // Khởi tạo UI
     capNhatTienUI();
     renderShop();
-    
+
     // Setup event listener cho shop
     if (danhSachDoAnEl) {
         danhSachDoAnEl.addEventListener('click', (e) => {
